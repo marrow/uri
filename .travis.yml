@@ -1,0 +1,41 @@
+language: python
+sudo: false
+cache: pip
+
+branches:
+  except:
+      - /^[^/]+/.+$/
+
+python:
+  - "2.7"
+  - "pypy-5.4.1"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
+env:
+  - ''
+  - 'OPTIONAL="markupsafe"'
+
+install:
+  - 'travis_retry pip install --upgrade setuptools pip'
+  - 'test -n "${OPTIONAL}" || pip install ${OPTIONAL}'
+
+script:
+    python setup.py test
+
+after_script:
+    bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  irc:
+    channels:
+      - 'irc.freenode.org#webcore'
+    use_notice: true
+    skip_join: true
+    on_success: change
+    on_failure: always
+    template:
+      - "%{repository_slug}:%{branch}@%{commit} %{message}"
+      - "Duration: %{duration} - Details: %{build_url}"
