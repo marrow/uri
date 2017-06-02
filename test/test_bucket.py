@@ -7,7 +7,6 @@ import pytest
 from uri.bucket import Bucket
 from uri.compat import str
 
-
 EXAMPLES = [
 		# String,       Arguments,         Name,    Value,      Valid
 		
