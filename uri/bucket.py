@@ -2,10 +2,9 @@
 
 from __future__ import unicode_literals
 
-from collections import namedtuple, deque, MutableSequence, MutableMapping, ItemsView, KeysView, ValuesView
+from collections import ItemsView, KeysView, MutableMapping, MutableSequence, ValuesView, deque, namedtuple
 
-from .compat import SENTINEL, str, py2
-
+from .compat import SENTINEL, py2, str
 
 
 class Bucket(object):
@@ -47,6 +46,13 @@ class Bucket(object):
 				self.__class__.__name__,
 				str(self)
 			)
+	
+	if py2:
+		def __repr__(self):
+			return "{}({})".format(
+					self.__class__.__name__,
+					str(self)
+				).encode('unicode-escape')
 	
 	def __iter__(self):
 		if self.name is not None:  # XXX: Confirm that empty string is permissible.
