@@ -49,7 +49,8 @@ setup(
 	author_email = author.email,
 	license = 'MIT',
 	keywords = ['type', 'URI', 'URL', 'rfc', 'rfc'],
-	classifiers = trove_map[version_info.releaselevel] + [
+	classifiers = [
+			trove_map[version_info.releaselevel],
 			"Intended Audience :: Developers",
 			"License :: OSI Approved :: MIT License",
 			"Operating System :: OS Independent",
@@ -68,10 +69,9 @@ setup(
 			"Topic :: Utilities"
 		],
 	
-	packages = find_packages(exclude=['test', 'example', 'benchmark', 'htmlcov']),
+	packages = find_packages(exclude=['test', 'htmlcov']),
 	include_package_data = True,
 	package_data = {'': ['README.rst', 'LICENSE.txt']},
-	namespace_packages = ['marrow', 'web', 'web.session'],
 	zip_safe = False,
 	
 	# ## Dependency Declaration
@@ -81,9 +81,6 @@ setup(
 		] if {'pytest', 'test', 'ptr'}.intersection(sys.argv) else [],
 	
 	install_requires = [
-			'marrow.schema>=1.2.0,<2.0.0',  # Declarative schema support.
-			'marrow.package>=1.1.0,<2.0.0',  # Plugin discovery and loading.
-			'pymongo>=3.2',  # We require modern API.
 			'pathlib2; python_version < "3.4"',  # Path manipulation utility.
 		],
 	
@@ -99,11 +96,11 @@ setup(
 	# ## Plugin Registration
 	
 	entry_points = {
-				'uri.scheme': [  # Session Engine
-						'http = uri.scheme.http:HTTPScheme[http]',
-						'https = uri.scheme.http:HTTPSScheme[http]',
-						'ftp = uri.scheme.ftp:FTPScheme',
-						'file = uri.scheme.file:FileScheme',
-					],
+				#'uri.scheme': [  # Session Engine
+				#		'http = uri.scheme.http:HTTPScheme[http]',
+				#		'https = uri.scheme.http:HTTPSScheme[http]',
+				#		'ftp = uri.scheme.ftp:FTPScheme',
+				#		'file = uri.scheme.file:FileScheme',
+				#	],
 			},
 )
