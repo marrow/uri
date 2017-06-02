@@ -20,7 +20,7 @@ env:
 
 install:
   - 'travis_retry pip install --upgrade setuptools pip'
-  - 'test -n "${OPTIONAL}" || pip install ${OPTIONAL}'
+  - 'test -z "${OPTIONAL}" || pip install ${OPTIONAL}'
 
 script:
     python setup.py test
