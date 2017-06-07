@@ -13,10 +13,10 @@ except ImportError:  # Adapt to locations on legacy versions.
 	from cgi import escape
 
 try:
-	from urllib.parse import urljoin, urlsplit, quote_plus, parse_qsl
+	from urllib.parse import urljoin, urlsplit, quote_plus, unquote_plus
 except ImportError:  # Adapt to locations on legacy versions.
-	from urlparse import urljoin, urlsplit, parse_qsl
-	from urllib import quote_plus
+	from urlparse import urljoin, urlsplit
+	from urllib import quote_plus, unquote_plus
 
 try:
 	from pathlib import PurePosixPath as Path

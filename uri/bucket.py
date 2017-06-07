@@ -4,24 +4,31 @@ from __future__ import unicode_literals
 
 from collections import ItemsView, KeysView, MutableMapping, MutableSequence, ValuesView, deque, namedtuple
 
-from .compat import SENTINEL, py2, str
+from .compat import SENTINEL, py2, str, unquote_plus, quote_plus
 
 
 class Bucket(object):
 	"""A bucket is a mutable container for an optionally named scalar value."""
 	
-	__slots__ = ('name', 'value', 'sep')
+	__slots__ = ('name', 'value', 'sep', 'valid')
 	
 	def __init__(self, name, value='', sep="=", strict=False):
+		self.valid = True
+		self.sep = sep
+		
 		if not value:
-			name, value = self.split(name, sep, strict)
+			if isinstance(name, str):
+				if name.count(sep) > 1:
+					if strict: raise ValueError("Multiple occurrences of separator {!r} in: '{!s}'".format(sep, name))
+					self.valid = False
+				
+				name, value = self.split(name)
+			
+			else:
+				name, value = name
 		
 		self.name = name
 		self.value = value
-		self.sep = sep
-		
-		if strict and (sep in name or sep in value):
-			raise ValueError("Multiple occurrences of separator {!r} in: {!s}".format(sep, self))
 	
 	def __eq__(self, other):
 		return str(self) == str(other)
@@ -29,17 +36,13 @@ class Bucket(object):
 	def __ne__(self, other):
 		return not str(self) == str(other)
 	
-	@classmethod
-	def split(cls, string, sep="=", strict=False):
-		if strict and string.count(sep) > 1:
-			raise ValueError("Multiple occurrences of separator {!r} in: {!r}".format(sep, string))
+	def split(self, string):
+		name, match, value = string.partition(self.sep)
 		
-		name, match, value = string.partition(sep)
+		name = unquote_plus(name)
+		value = unquote_plus(value)
+		
 		return name if match else None, value if match else name
-	
-	@property
-	def valid(self):
-		return not (self.name and self.sep in self.name) and self.sep not in self.value
 	
 	def __repr__(self):
 		return "{}({})".format(
@@ -64,7 +67,9 @@ class Bucket(object):
 		return 1 if self.name is None else 2
 	
 	def __str__(self):
-		return self.sep.join(self)
+		# Certain symbols are explicitly allowed, ref: http://pretty-rfc.herokuapp.com/RFC3986#query
+		iterator = (quote_plus(i).replace('%3F', '?').replace('%2F', '/') for i in self) if self.valid else self
+		return self.sep.join(iterator)
 	
 	if py2:
 		__unicode__ = __str__

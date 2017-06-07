@@ -29,7 +29,7 @@ EXAMPLES = [
 @pytest.mark.parametrize('string,args,name,value,valid', EXAMPLES)
 class TestBucketExamples(object):
 	def test_string_identity(self, string, args, name, value, valid):
-		bucket = Bucket(*args)
+		bucket = Bucket(string)
 		assert str(bucket) == string
 	
 	def test_names(self, string, args, name, value, valid):
@@ -41,11 +41,11 @@ class TestBucketExamples(object):
 		assert bucket.value == value
 	
 	def test_validity(self, string, args, name, value, valid):
-		bucket = Bucket(*args)
+		bucket = Bucket(string)
 		assert bucket.valid == valid
 	
 	def test_identity_comparison(self, string, args, name, value, valid):
-		bucket = Bucket(*args)
+		bucket = Bucket(string)
 		assert bucket == string
 	
 	def test_unequal_comparison(self, string, args, name, value, valid):
@@ -71,7 +71,3 @@ class TestBucketExamplesInvalid(object):
 	def test_strict_string_failure(self, string, args, name, value, valid):
 		with pytest.raises(ValueError):
 			Bucket(string, strict=True)
-	
-	def test_strict_args_failure(self, string, args, name, value, valid):
-		with pytest.raises(ValueError):
-			Bucket(*args, strict=True)
