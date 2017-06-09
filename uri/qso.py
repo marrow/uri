@@ -280,7 +280,7 @@ class QSO(object):
 	def clear(self):  # MutableMapping
 		"""Clear all values from this query string object."""
 		
-		self.buckets.clear()
+		del self.buckets[:]
 		self.groups.clear()
 	
 	def update(self, *args, **kw):  # MutableMapping
