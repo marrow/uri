@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from collections import ItemsView, KeysView, MutableMapping, MutableSequence, ValuesView, deque, namedtuple
 
-from .compat import SENTINEL, py2, str, unquote_plus, quote_plus
+from .compat import SENTINEL, py2, quote_plus, str, unquote_plus
 
 
 class Bucket(object):
@@ -23,6 +23,9 @@ class Bucket(object):
 					self.valid = False
 				
 				name, value = self.split(name)
+			
+			elif isinstance(name, Bucket):
+				name, value = name.name, name.value
 			
 			else:
 				name, value = name
