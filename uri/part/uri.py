@@ -43,7 +43,7 @@ class URIPart(object):
 		
 		for part in ('scheme', 'username', 'password', 'hostname', 'port', 'path', 'query', 'fragment'):
 			pvalue = getattr(result, part)
-			if value:
+			if pvalue is not None:
 				setattr(obj, part, pvalue)
 		
 		obj._uri = value

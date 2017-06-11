@@ -11,3 +11,12 @@ from ..compat import Path, str
 class PathPart(ProxyPart):
 	attribute = '_path'
 	cast = Path
+	empty = '/'
+	
+	def render(self, obj, value):
+		result = super(PathPart, self).render(obj, value)
+		
+		if result == '.':
+			return self.empty
+		
+		return result

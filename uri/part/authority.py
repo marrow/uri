@@ -7,9 +7,7 @@ from .base import GroupPart
 
 class AuthorityPart(GroupPart):
 	attributes = ('auth', 'host', 'port')
-	prefix = '//'
 
 
 class SafeAuthorityPart(GroupPart):
 	attributes = ('safe_auth', 'host', 'port')
-	prefix = '//'

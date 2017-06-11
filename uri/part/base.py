@@ -37,7 +37,7 @@ class ProxyPart(Part):
 		return getattr(obj, self.attribute)
 	
 	def __set__(self, obj, value):
-		if value is not None:
+		if value is not None and value is not b'':
 			value = self.cast(value)
 		
 		setattr(obj, self.attribute, value)
@@ -65,4 +65,3 @@ class GroupPart(Part):
 
 class BasePart(GroupPart):
 	attributes = ('scheme', 'heirarchical')
-	sep = '//'

@@ -34,6 +34,8 @@ class URI(MutableMapping):
 	
 	__parts__ = ('scheme', 'authority', 'path', 'query', 'fragment')
 	__safe_parts__ = ('scheme', 'safe_auth', 'host', 'port', 'path', 'query', 'fragment')
+	__all_parts__ = {'scheme', 'user', 'password', 'host', 'port', 'path', 'query', 'fragment', 'auth', 'authority',
+			'heirarchical', 'uri', 'username', 'hostname', 'authentication'}
 	
 	# Scalar Parts
 	scheme = SchemePart()
@@ -88,15 +90,14 @@ class URI(MutableMapping):
 			# To allow for simpler cases, this attribute does not need to be callable.
 			if callable(_uri): _uri = _uri()
 		
-		if hasattr(_uri, 'make_uri'):  # Support pathlib method protocol.
-			_uri = _uri.make_uri()
+		if hasattr(_uri, 'as_uri'):  # Support pathlib method protocol.
+			_uri = _uri.as_uri()
 		
 		self.uri = _uri  # If None, this will also handle setting defaults.
 		
 		if parts:  # If not given a base URI, defines a new URI, otherwise update the given URI.
-			allowable = set(self.__parts__ + self.__safe_parts__)
 			for part, value in parts.items():
-				if part not in allowable:
+				if part not in self.__all_parts__:
 					raise TypeError("Unknown URI component: " + part)
 				
 				setattr(self, part, value)
@@ -197,7 +198,7 @@ class URI(MutableMapping):
 	# Path-like behaviours.
 	
 	def __div__(self, other):
-		return URI(self, path=self.path / other, query='', fragment=None)
+		return self.__class__(self, path=self.path / other, query='', fragment=None)
 	
 	__idiv__ = __div__
 	__truediv__ = __div__
@@ -208,7 +209,7 @@ class URI(MutableMapping):
 		if '://' in other:
 			_, _, other = other.partition('://')
 		
-		return URI(str(self.scheme) + "://" + other)
+		return self.__class__(str(self.scheme) + "://" + other)
 	
 	__ifloordiv__ = __floordiv__
 	
@@ -243,9 +244,9 @@ class URI(MutableMapping):
 		"""Attempt to resolve a new URI given an updated URI, partial or complete."""
 		
 		if uri:
-			result = URI(urljoin(str(self), str(uri)))
+			result = self.__class__(urljoin(str(self), str(uri)))
 		else:
-			result = URI(self)
+			result = self.__class__(self)
 		
 		for part, value in parts.items():
 			if part not in self.__parts__:

@@ -25,6 +25,14 @@ class SchemePart(Part):
 		
 		return plugin
 	
+	def render(self, obj, value):
+		result = super(SchemePart, self).render(obj, value)
+		
+		if result and obj.authority or obj._scheme in ('http', 'file'):
+			result = result + '//'
+		
+		return result
+	
 	def __get__(self, obj, cls=None):
 		if obj is None: return self
 		scheme = obj._scheme

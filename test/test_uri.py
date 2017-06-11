@@ -2,7 +2,15 @@
 
 from __future__ import unicode_literals
 
+import pytest
+
+from uri.compat import Path
 from uri.uri import URI
+
+
+def test_uri_wtf():
+	with pytest.raises(TypeError):
+		URI(foo="bar")
 
 
 def test_basic_uri():
@@ -17,6 +25,8 @@ def test_basic_uri():
 	assert instance.user == 'user'
 	assert instance.password == 'pass'
 	assert instance.host == 'example.com'
+	assert instance.query == 'name=ferret'
+	assert instance.qs == 'name=ferret'
 	
 	# Compound URI components.
 	assert instance.auth == 'user:pass'
@@ -41,3 +51,18 @@ def test_basic_uri():
 	
 	assert str(instance.resolve('/baz')) == "https://user:pass@example.com/baz"
 	assert str(instance.resolve('baz')) == "https://user:pass@example.com/foo/baz"
+
+
+def test_qs_assignment():
+	instance = URI("http://example.com")
+	assert str(instance) == "http://example.com/"
+	
+	instance.qs = "foo=bar"
+	assert str(instance) == "http://example.com/?foo=bar"
+
+
+def test_path_usage():
+	path = Path("/foo/bar/baz")
+	instance = URI(path)
+	assert instance.scheme == 'file'
+	assert str(instance) == "file:///foo/bar/baz"
