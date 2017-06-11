@@ -96,11 +96,15 @@ setup(
 	# ## Plugin Registration
 	
 	entry_points = {
-				#'uri.scheme': [  # Session Engine
-				#		'http = uri.scheme.http:HTTPScheme[http]',
-				#		'https = uri.scheme.http:HTTPSScheme[http]',
-				#		'ftp = uri.scheme.ftp:FTPScheme',
-				#		'file = uri.scheme.file:FileScheme',
-				#	],
+				'uri.scheme': [
+						# https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
+						# https://www.w3.org/wiki/UriSchemes
+						'http = uri.scheme:URLScheme',
+						'https = uri.scheme:URLScheme',
+						'ftp = uri.scheme:URLScheme',
+						'file = uri.scheme:URLScheme',
+						'ldap = uri.scheme:URLScheme',
+						'telnet = uri.scheme:URLScheme',
+					],
 			},
 )

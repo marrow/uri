@@ -17,6 +17,8 @@ class PathPart(ProxyPart):
 		result = super(PathPart, self).render(obj, value)
 		
 		if result == '.':
+			if not obj._host:
+				return ''
 			return self.empty
 		
 		return result

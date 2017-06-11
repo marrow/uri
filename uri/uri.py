@@ -238,7 +238,11 @@ class URI(MutableMapping):
 		For example, if the protocol is missing, it's protocol-relative. If the host is missing, it's host-relative, etc.
 		"""
 		
-		return not (self.scheme and self.host and self._path and self._path.is_absolute())
+		if self._scheme is None:
+			return True
+		
+		scheme = self.scheme
+		return scheme.is_relative(self)
 	
 	def resolve(self, uri=None, **parts):
 		"""Attempt to resolve a new URI given an updated URI, partial or complete."""

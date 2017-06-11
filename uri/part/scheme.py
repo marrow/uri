@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+from pkg_resources import iter_entry_points
+
 from .base import Part
 from ..compat import py2, r
 from ..scheme import Scheme
@@ -21,14 +23,20 @@ class SchemePart(Part):
 		
 		# TODO: Entry point namespace use for plugin discovery.
 		
-		self.registry[plugin] = plugin = Scheme(plugin)  # Order is important here, due to label re-use.
+		try:
+			result, = iter_entry_points('uri.scheme', plugin)
+			result = result.load()(plugin)
+		except:
+			result = Scheme(plugin)
 		
-		return plugin
+		self.registry[plugin] = result
+		
+		return result
 	
 	def render(self, obj, value):
 		result = super(SchemePart, self).render(obj, value)
 		
-		if result and obj.authority or obj._scheme in ('http', 'file'):
+		if obj._scheme and obj.scheme.slashed:
 			result = result + '//'
 		
 		return result
