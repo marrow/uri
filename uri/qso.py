@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from collections import Mapping, deque, namedtuple
+from collections import Mapping, MutableMapping, deque, namedtuple
 
 from .bucket import Bucket
 from .compat import SENTINEL, py2, quote_plus, str, unquote_plus
@@ -291,3 +291,6 @@ class QSO(object):
 		
 		for key in kw:
 			self[key] = kw[key]
+
+
+MutableMapping.register(QSO)

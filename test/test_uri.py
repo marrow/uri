@@ -27,6 +27,13 @@ URI_COMPONENTS = [
 				base = 'https://',
 				path = Path('.'),
 			)),
+		('/foo', dict(
+				relative = True,
+				path = Path('/foo'),
+				base = '/foo',
+				summary = '/foo',
+				heirarchical = '/foo',
+			)),
 		('http://user:pass@example.com/over/there?name=ferret#anchor', dict(
 				authority = 'user:pass@example.com',
 				fragment = 'anchor',
@@ -150,7 +157,15 @@ class TestURI(object):
 		instance = URI(string)
 		assert str(instance) == attributes['uri']
 	
-	@pytest.mark.parametrize('component', URI.__all_parts__ | {'base', 'summary', 'relative'})
+	def test_identity_comparison(self, string, attributes):
+		instance = URI(string)
+		assert instance == attributes['uri']
+	
+	def test_length(self, string, attributes):
+		instance = URI(string)
+		assert len(instance) == len(string)
+	
+	@pytest.mark.parametrize('component', URI.__all_parts__ | {'base', 'qs', 'summary', 'relative'})
 	def test_component(self, string, attributes, component):
 		instance = URI(string)
 		value = getattr(instance, component, SENTINEL)
@@ -206,3 +221,30 @@ class TestURIBasics(object):
 		instance = URI(path)
 		assert instance.scheme == 'file'
 		assert str(instance) == "file:///foo/bar/baz"
+
+
+class TestURIDictlike(object):
+	@pytest.fixture
+	def instance(self):
+		return URI('http://example.com/over/there?name=ferret')
+	
+	def test_get(self, instance):
+		assert instance['name'] == 'ferret'
+	
+	def test_set_new(self, instance):
+		instance['foo'] = 'bar'
+		assert str(instance) == 'http://example.com/over/there?name=ferret&foo=bar'
+	
+	def test_set_replace(self, instance):
+		instance['name'] = 'lemur'
+		assert str(instance) == 'http://example.com/over/there?name=lemur'
+	
+	def test_del(self, instance):
+		del instance['name']
+		assert str(instance) == 'http://example.com/over/there'
+	
+	def test_iter(self, instance):
+		pass
+	
+	def test_len(self, instance):
+		pass

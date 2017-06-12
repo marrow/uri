@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from collections import MutableMapping
+from collections import Mapping, MutableMapping
 from re import compile as r
 
 from .compat import Path, str, py2, urlsplit, urljoin
@@ -21,7 +21,7 @@ from .part.uri import URIPart
 from .part.user import UserPart
 
 
-class URI(MutableMapping):
+class URI(object):
 	"""An object representing a URI (absolute or relative) and its components.
 	
 	Acts as a mutable mapping for manipulation of query string arguments. If the query string is not URL
@@ -107,7 +107,9 @@ class URI(MutableMapping):
 	def __repr__(self):
 		"""Return a "safe" programmers' representation that omits passwords."""
 		
-		return "{0}('{1}')".format(self.__class__.__name__, self.safe_uri)
+		parts = ["{}={!r}".format(i, getattr(self, i, None)) for i in self.__parts__]
+		
+		return "{0}('{1}')".format(self.__class__.__name__, ", ".join(parts))
 	
 	def __str__(self):
 		"""Return the Unicode text representation of this URI, including passwords."""
@@ -133,7 +135,10 @@ class URI(MutableMapping):
 		
 		# Because things like query string argument order may differ, but still be equivalent...
 		for part in self.__parts__:
-			if not getattr(self, part, None) == getattr(other, part, None):
+			ours = getattr(self, part, None)
+			theirs = getattr(other, part, None)
+			
+			if ours != theirs:
 				return False
 		
 		return True
@@ -156,15 +161,17 @@ class URI(MutableMapping):
 	def __getitem__(self, name):
 		"""Shortcut for retrieval of a query string argument."""
 		
-		if not isinstance(self._query, dict):
+		query = self.query
+		
+		if not isinstance(query, Mapping):
 			raise ValueError("Query string is not manipulatable.")
 		
-		return self._query[name]
+		return query[name]
 	
 	def __setitem__(self, name, value):
 		"""Shortcut for (re)assignment of query string arguments."""
 		
-		if not isinstance(self._query, dict):
+		if not isinstance(self._query, MutableMapping):
 			raise ValueError("Query string is not manipulatable.")
 		
 		self._uri = None  # Invalidate the cached string.
@@ -173,7 +180,7 @@ class URI(MutableMapping):
 	def __delitem__(self, name):
 		"""Shortcut for removal of a query string argument."""
 		
-		if not isinstance(self._query, dict):
+		if not isinstance(self._query, MutableMapping):
 			raise ValueError("Query string is not manipulatable.")
 		
 		self._uri = None  # Invalidate the cached string.
@@ -182,18 +189,14 @@ class URI(MutableMapping):
 	def __iter__(self):
 		"""Retrieve the query string argument names."""
 		
-		if not isinstance(self._query, dict):
+		if not isinstance(self._query, Mapping):
 			raise ValueError("Query string is not manipulatable.")
 		
 		return iter(self._query)
 	
 	def __len__(self):
-		"""Determine the number of query string arguments."""
-		
-		if not isinstance(self._query, dict):
-			return 0
-		
-		return len(self._query)
+		"""The length of the URI as a string."""
+		return len(self.uri)
 	
 	# Path-like behaviours.
 	
@@ -238,10 +241,14 @@ class URI(MutableMapping):
 		For example, if the protocol is missing, it's protocol-relative. If the host is missing, it's host-relative, etc.
 		"""
 		
-		if self._scheme is None:
+		try:
+			scheme = self.scheme
+		except:
+			scheme = None
+		
+		if not scheme:
 			return True
 		
-		scheme = self.scheme
 		return scheme.is_relative(self)
 	
 	def resolve(self, uri=None, **parts):
@@ -259,3 +266,6 @@ class URI(MutableMapping):
 			setattr(result, part, value)
 		
 		return result
+
+
+MutableMapping.register(URI)

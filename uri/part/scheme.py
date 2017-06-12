@@ -15,11 +15,8 @@ class SchemePart(Part):
 	registry = {'': None}
 	
 	def load(self, plugin):
-		if not plugin:
-			if plugin in self.registry:
-				return self.registry[plugin]
-			
-			return plugin
+		if plugin in self.registry:
+			return self.registry[plugin]
 		
 		# TODO: Entry point namespace use for plugin discovery.
 		
