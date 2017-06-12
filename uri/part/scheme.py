@@ -45,4 +45,11 @@ class SchemePart(Part):
 		return self.load(scheme)
 	
 	def __set__(self, obj, value):
+		if isinstance(value, bytes):
+			value = value.decode('ascii')
+		
+		if not value:
+			obj._scheme = ''
+			return
+		
 		obj._scheme = Scheme(value).name

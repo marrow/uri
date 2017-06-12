@@ -37,7 +37,10 @@ class ProxyPart(Part):
 		return getattr(obj, self.attribute)
 	
 	def __set__(self, obj, value):
-		if value is not None and value is not b'':
+		if value == b'':
+			value = None
+		
+		if value is not None:
 			value = self.cast(value)
 		
 		setattr(obj, self.attribute, value)

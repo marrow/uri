@@ -7,13 +7,6 @@ import pytest
 from uri.compat import SENTINEL, Path
 from uri.uri import URI
 
-
-def test_uri_wtf():
-	with pytest.raises(TypeError):
-		URI(foo="bar")
-
-
-
 URI_COMPONENTS = [
 		('http://', dict(
 				relative = True,
@@ -151,15 +144,37 @@ for _uri, _parts in URI_COMPONENTS:
 	if 'host' in _parts: _parts['hostname'] = _parts['host']
 
 
+@pytest.fixture
+def instance():
+	return URI('http://user:pass@example.com/over/there?name=ferret#anchor')
+
+
+@pytest.fixture
+def empty():
+	return URI('http://example.com/over/there')
+
+
 @pytest.mark.parametrize('string,attributes', URI_COMPONENTS)
 class TestURI(object):
+	def test_truthiness(self, string, attributes):
+		instance = URI(string)
+		assert instance
+	
 	def test_identity(self, string, attributes):
 		instance = URI(string)
 		assert str(instance) == attributes['uri']
 	
+	def test_identity_bytes(self, string, attributes):
+		instance = URI(string)
+		assert bytes(instance) == attributes['uri'].encode('utf-8')
+	
 	def test_identity_comparison(self, string, attributes):
 		instance = URI(string)
 		assert instance == attributes['uri']
+	
+	def test_inverse_bad_comparison(self, string, attributes):
+		instance = URI(string)
+		assert instance != "fnord"
 	
 	def test_length(self, string, attributes):
 		instance = URI(string)
@@ -178,36 +193,52 @@ class TestURI(object):
 
 
 class TestURIBasics(object):
-	def test_protocol_relative_shortcut(self):
+	def test_uri_error(self):
+		with pytest.raises(TypeError):
+			URI(foo="bar")
+	
+	def test_empty(self):
+		instance = URI()
+		assert str(instance) == ""
+		assert not instance
+	
+	def test_html_representation(self, instance):
+		markupsafe = pytest.importorskip('markupsafe')
+		
+		html = markupsafe.escape(instance)
+		expect = '<a href="http://user:pass@example.com/over/there?name=ferret#anchor">example.com/over/there</a>'
+		
+		assert html == expect
+	
+	def test_protocol_relative_shortcut(self, instance):
 		https = URI("https://")
-		instance = URI("http://user:pass@example.com/over/there?name=ferret#anchor")
 		
 		instance = https // instance
 		assert str(instance) == "https://user:pass@example.com/over/there?name=ferret#anchor"
 	
-	def test_rooted(self):
-		instance = URI("http://user:pass@example.com/over/there?name=ferret#anchor")
-		
+	def test_rooted(self, instance):
 		instance = instance / "/foo"
 		assert str(instance) == "http://user:pass@example.com/foo"
 	
-	def test_relative(self):
-		instance = URI("http://user:pass@example.com/over/there?name=ferret#anchor")
-		
+	def test_relative(self, instance):
 		instance = instance / "foo"
 		assert str(instance) == "http://user:pass@example.com/over/there/foo"
 	
-	def test_relative_assignment(self):
-		instance = URI("http://user:pass@example.com/over/there?name=ferret#anchor")
-		
+	def test_relative_assignment(self, instance):
 		instance /= "bar"
 		assert str(instance) == "http://user:pass@example.com/over/there/bar"
 	
-	def test_resolution(self):
-		instance = URI("http://user:pass@example.com/over/there?name=ferret#anchor")
-		
+	def test_resolution_by_uri(self, instance):
 		assert str(instance.resolve('/baz')) == "http://user:pass@example.com/baz"
 		assert str(instance.resolve('baz')) == "http://user:pass@example.com/over/baz"
+	
+	def test_resolution_overriding(self, instance):
+		expect = "http://example.com/over/there?name=ferret#anchor"
+		assert str(instance.resolve(user=None, password=None)) == expect
+	
+	def test_resolution_error(self, instance):
+		with pytest.raises(TypeError):
+			instance.resolve(unknown="fnord")
 	
 	def test_qs_assignment(self):
 		instance = URI("http://example.com")
@@ -224,27 +255,34 @@ class TestURIBasics(object):
 
 
 class TestURIDictlike(object):
-	@pytest.fixture
-	def instance(self):
-		return URI('http://example.com/over/there?name=ferret')
-	
 	def test_get(self, instance):
 		assert instance['name'] == 'ferret'
 	
-	def test_set_new(self, instance):
+	def test_set_new(self, instance, empty):
 		instance['foo'] = 'bar'
-		assert str(instance) == 'http://example.com/over/there?name=ferret&foo=bar'
+		assert str(instance) == 'http://user:pass@example.com/over/there?name=ferret&foo=bar#anchor'
+		
+		empty['bar'] = 'baz'
+		assert str(empty) == 'http://example.com/over/there?bar=baz'
 	
 	def test_set_replace(self, instance):
 		instance['name'] = 'lemur'
-		assert str(instance) == 'http://example.com/over/there?name=lemur'
+		assert str(instance) == 'http://user:pass@example.com/over/there?name=lemur#anchor'
 	
 	def test_del(self, instance):
 		del instance['name']
-		assert str(instance) == 'http://example.com/over/there'
+		assert str(instance) == 'http://user:pass@example.com/over/there#anchor'
 	
 	def test_iter(self, instance):
-		pass
+		assert list(instance) == ["name=ferret"]
 	
-	def test_len(self, instance):
-		pass
+	def test_get_fail(self, instance, empty):
+		with pytest.raises(KeyError):
+			instance['foo']
+		
+		with pytest.raises(KeyError):
+			empty['name']
+	
+	def test_repr(self, instance, empty):
+		assert repr(instance) == "URI('http://user@example.com/over/there?name=ferret#anchor')"
+		assert repr(empty) == "URI('http://example.com/over/there')"

@@ -107,9 +107,7 @@ class URI(object):
 	def __repr__(self):
 		"""Return a "safe" programmers' representation that omits passwords."""
 		
-		parts = ["{}={!r}".format(i, getattr(self, i, None)) for i in self.__parts__]
-		
-		return "{0}('{1}')".format(self.__class__.__name__, ", ".join(parts))
+		return "{0}('{1}')".format(self.__class__.__name__, self.safe_uri)
 	
 	def __str__(self):
 		"""Return the Unicode text representation of this URI, including passwords."""
@@ -151,7 +149,7 @@ class URI(object):
 	def __bool__(self):
 		"""Truthyness comparison."""
 		
-		return bool(self.url)
+		return bool(self.uri)
 	
 	if py2:
 		__nonzero__ = __bool__
@@ -161,36 +159,20 @@ class URI(object):
 	def __getitem__(self, name):
 		"""Shortcut for retrieval of a query string argument."""
 		
-		query = self.query
-		
-		if not isinstance(query, Mapping):
-			raise ValueError("Query string is not manipulatable.")
-		
-		return query[name]
+		return self.query[name]
 	
 	def __setitem__(self, name, value):
 		"""Shortcut for (re)assignment of query string arguments."""
 		
-		if not isinstance(self._query, MutableMapping):
-			raise ValueError("Query string is not manipulatable.")
-		
-		self._uri = None  # Invalidate the cached string.
 		self._query[name] = str(value)
 	
 	def __delitem__(self, name):
 		"""Shortcut for removal of a query string argument."""
 		
-		if not isinstance(self._query, MutableMapping):
-			raise ValueError("Query string is not manipulatable.")
-		
-		self._uri = None  # Invalidate the cached string.
 		del self._query[name]
 	
 	def __iter__(self):
 		"""Retrieve the query string argument names."""
-		
-		if not isinstance(self._query, Mapping):
-			raise ValueError("Query string is not manipulatable.")
 		
 		return iter(self._query)
 	
@@ -229,9 +211,11 @@ class URI(object):
 			<a href="http://example.com/foo/bar">example.com/foo/bar</a>
 		"""
 		
+		from markupsafe import escape
+		
 		return '<a href="{address}">{summary}</a>'.format(
-				address = escape(self.url),
-				summary = escape(self.host + str(self.path)),
+				address = escape(self.uri),
+				summary = escape(self.summary),
 			)
 	
 	@property
@@ -241,10 +225,7 @@ class URI(object):
 		For example, if the protocol is missing, it's protocol-relative. If the host is missing, it's host-relative, etc.
 		"""
 		
-		try:
-			scheme = self.scheme
-		except:
-			scheme = None
+		scheme = self.scheme
 		
 		if not scheme:
 			return True
@@ -260,7 +241,7 @@ class URI(object):
 			result = self.__class__(self)
 		
 		for part, value in parts.items():
-			if part not in self.__parts__:
+			if part not in self.__all_parts__:
 				raise TypeError("Unknown URI component: " + part)
 			
 			setattr(result, part, value)
