@@ -99,10 +99,11 @@ setup(
 				'uri.scheme': [
 						# https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
 						# https://www.w3.org/wiki/UriSchemes
+						'file = uri.scheme:URLScheme',
+						'ftp = uri.scheme:URLScheme',
 						'http = uri.scheme:URLScheme',
 						'https = uri.scheme:URLScheme',
-						'ftp = uri.scheme:URLScheme',
-						'file = uri.scheme:URLScheme',
+						'irc = uri.scheme:URLScheme',
 						'ldap = uri.scheme:URLScheme',
 						'telnet = uri.scheme:URLScheme',
 					],
