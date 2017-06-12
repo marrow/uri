@@ -30,7 +30,7 @@ class URI(object):
 	"""
 	
 	# Skip allocation of a dictionary per instance by pre-defining available slots.
-	__slots__ = ('_scheme', '_user', '_password', '_host', '_port', '_path', '_query', '_fragment')
+	__slots__ = ('_scheme', '_user', '_password', '_host', '_port', '_path', '_trailing', '_query', '_fragment')
 	
 	__parts__ = ('scheme', 'authority', 'path', 'query', 'fragment')
 	__safe_parts__ = ('scheme', 'safe_auth', 'host', 'port', 'path', 'query', 'fragment')
@@ -183,7 +183,28 @@ class URI(object):
 	# Path-like behaviours.
 	
 	def __div__(self, other):
-		return self.__class__(self, path=self.path / other, query='', fragment=None)
+		sother = str(other)
+		
+		if sother == '.':  # This URI without fragment or query.
+			return self.__class__(self, query=None, fragment=None)
+		
+		if sother.startswith('#'):  # Fragment change only.
+			return self.__class__(self, fragment=other[1:])
+		
+		if '://' in sother:  # Whole-uri switch.
+			return self.__class__(other)
+		
+		# Otherwise resolve path.
+		base = str(self.path) or '.'
+		trailing = False if base in ('/', '.') else self._trailing
+		
+		if base == '.':
+			base = '/'
+		
+		elif trailing:
+			base += '/'
+		
+		return self.__class__(self, path=urljoin(base, sother), query=None, fragment=None)
 	
 	__idiv__ = __div__
 	__truediv__ = __div__

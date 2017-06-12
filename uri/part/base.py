@@ -20,12 +20,6 @@ class Part(object):
 	def render(self, obj, value):
 		if not value: return self.empty
 		return self.prefix + str(value) + self.suffix
-	
-	def validate(self, obj, value):
-		pass
-	
-	def split(self, obj, value):
-		pass
 
 
 class ProxyPart(Part):

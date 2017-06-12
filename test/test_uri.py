@@ -222,11 +222,11 @@ class TestURIBasics(object):
 	
 	def test_relative(self, instance):
 		instance = instance / "foo"
-		assert str(instance) == "http://user:pass@example.com/over/there/foo"
+		assert str(instance) == "http://user:pass@example.com/over/foo"
 	
 	def test_relative_assignment(self, instance):
 		instance /= "bar"
-		assert str(instance) == "http://user:pass@example.com/over/there/bar"
+		assert str(instance) == "http://user:pass@example.com/over/bar"
 	
 	def test_resolution_by_uri(self, instance):
 		assert str(instance.resolve('/baz')) == "http://user:pass@example.com/baz"

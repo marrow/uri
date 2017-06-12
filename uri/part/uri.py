@@ -44,6 +44,8 @@ class URIPart(object):
 		
 		result = urlsplit(str(value))
 		
+		obj._trailing = result.path.endswith('/')
+		
 		for part in ('scheme', 'username', 'password', 'hostname', 'port', 'path', 'query', 'fragment'):
 			pvalue = getattr(result, part)
 			if pvalue:

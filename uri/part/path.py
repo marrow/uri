@@ -18,8 +18,17 @@ class PathPart(ProxyPart):
 		
 		if value is None:
 			value = Path()
+			obj._trailing = False
 		
 		return value
+	
+	def __set__(self, obj, value):
+		try:
+			obj._trailing = str(value).endswith('/')
+		except:
+			obj._trailing = False
+		
+		super(PathPart, self).__set__(obj, value)
 	
 	def render(self, obj, value):
 		result = super(PathPart, self).render(obj, value)
@@ -27,6 +36,10 @@ class PathPart(ProxyPart):
 		if result is None or result == '.':
 			if not obj._host:
 				return ''
+			
 			return self.empty
+		
+		if obj._trailing and not result.endswith('/'):
+			result += '/'
 		
 		return result
