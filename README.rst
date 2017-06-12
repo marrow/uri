@@ -68,22 +68,47 @@ Getting Started
 URI
 ---
 
-An abstract string identifier for a resource with the regular form defined by `RFC 3986
-<http://pretty-rfc.herokuapp.com/RFC3986>`_::
+An abstract string-like (and mapping-like, and iterator-like...) identifier for a resource with the regular form
+defined by `RFC 3986 <http://pretty-rfc.herokuapp.com/RFC3986>`_::
 
     scheme:[//[user[:password]@]host[:port]][/path][?query][#fragment]
 
 For details on these components, `please refer to Wikipedia
-<https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Syntax>`__. They are combined into several groups:
+<https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Syntax>`__. Each of these components is represented by an
+appropraite rich datatype:
 
-* The *credentials* are a combination of: ``user`` + ``password``
-* The *authority* is the combination of: ``credentials`` + ``host`` + ``port``
-* The *heirarchical part* is the combination of: ``authority`` + ``path``
-* The *base* is the combination of: ``scheme`` + ``heirarchical part``
+* The ``scheme`` of a URI represents an extensible API of string-like plugins.
+* Any IPv6 ``host`` is automatically wrapped and unwrapped in square braces.
+* The ``path`` is represented by a ``PurePosixPath``.
+* The ``query`` is a rich ordered multi-value bucketed mutable mapping called ``QSO``. (Ouch, but that's what it is!)
 
-Each URI has a scheme which should be registered with the `Internet Assigned Numbers Authority (IANA)
-<https://en.m.wikipedia.org/wiki/Internet_Assigned_Numbers_Authority>`_ which specifies the mechanics of the URI
-fields.  Examples include: ``http``, ``https``, ``ftp``, ``mailto``, ``file``, ``data``, etc.
+Instantiate a new URI by passing in a string or string-castable object, ``pathlib.Path`` compatible object, or object
+exposing a ``__link__`` method or attribute::
+
+    home = URI("https://github.com/marrow/")
+
+The *scalar* attributes are combined into several *compound* groups for convienence:
+
+* The ``credentials`` are a colon (``:``) separated combination of: ``user`` + ``password`` — also accessible via the
+  shorter ``auth`` or the longer ``authentication`` attributes.
+* The ``authority`` part is the combination of: ``credentials`` + ``host`` + ``port``
+* The ``heirarchical`` part is the combination of: ``authority`` part + ``path``
+
+Other aliases are provided for the scalar components, typically for compliance with external APIs, such as
+interoperability with ``pathlib.Path`` or ``urlsplit`` objects:
+
+* ``username`` is the long form of ``user``.
+* ``hostname`` is the long form of ``host``.
+* ``authentication`` is the long form of ``auth``.
+
+In addition, several string views are provided for convienence, but ultimately all just call `str()` against the
+instance or one of the compound groups described above:
+
+* ``uri`` represents the entire URI as a string.
+* ``safe_uri`` represents the enture URI, sans any password that may be present.
+* ``base`` is the combination of ``scheme`` and the ``heirarchical`` part.
+* ``summary`` is a useful shortcut for web presentation containing only the ``host`` and ``port`` of the URI.
+* ``qs`` is just the query string, as a plain string instead of QSO instance.
 
 URI values may be absolute identifiers or relative references. Absolute URIs are what most people see every day:
 
@@ -104,43 +129,23 @@ Indirect references require the context of an absolute identifier in order to re
 * ``resource#fragment`` — referencing a specific fragment of a sibling resource.
 * ``#fragment`` — a same-document reference to a specific fragment of the context.
 
+Two primary methods are provided to combine a base URI with another URI, absolute or relative.  The first, utilizing
+the ``uri.resolve(uri, **parts)`` method, allows you to both resolve a target URL as well as provide explicit
+overrides for any of the above scalar attributes, such as query string. The second, which is recommended for general
+use, is to use the division and floor division operators::
 
-URL
----
-
-A structured identifier for a resource typically defined by a protocol and network location, e.g. the mechanism of
-access, and path to the resource.  In the URI scheme examples given in the previous section, ``http`` is a URL, but
-``data`` is not.
-
-
-URN
----
-
-A namespaced textual identifier for a resource without implication as to location or mechanism of access.
+    base = URI("https://example.com/about/us")
+    cdn = base // "cdn.example.com"
+    js = cdn / "script.js"
+    css = cdn / "script.css"
 
 
+Schemes
+-------
 
-URI Schemes
-===========
-
-
-URL Schemes
-===========
-
-Local Files
------------
-
-
-HTTP and HTTPS
---------------
-
-
-File Transfer Protocol
-----------------------
-
-
-URN Schemes
-===========
+Each URI has a scheme which should be registered with the `Internet Assigned Numbers Authority (IANA)
+<https://en.m.wikipedia.org/wiki/Internet_Assigned_Numbers_Authority>`_ which specifies the mechanics of the URI
+fields.  Examples include: ``http``, ``https``, ``ftp``, ``mailto``, ``file``, ``data``, etc.
 
 
 Version History

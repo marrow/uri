@@ -7,7 +7,7 @@ from re import compile as r
 
 from .compat import Path, str, py2, urlsplit, urljoin
 from .part.auth import AuthenticationPart, SafeAuthenticationPart
-from .part.authority import AuthorityPart, SafeAuthorityPart
+from .part.authority import AuthorityPart
 from .part.base import BasePart
 from .part.fragment import FragmentPart
 from .part.heir import HeirarchicalPart
@@ -33,7 +33,7 @@ class URI(object):
 	__slots__ = ('_scheme', '_user', '_password', '_host', '_port', '_path', '_trailing', '_query', '_fragment')
 	
 	__parts__ = ('scheme', 'authority', 'path', 'query', 'fragment')
-	__safe_parts__ = ('scheme', 'safe_auth', 'host', 'port', 'path', 'query', 'fragment')
+	__safe_parts__ = ('scheme', '_safe_auth', 'host', 'port', 'path', 'query', 'fragment')
 	__all_parts__ = {'scheme', 'user', 'password', 'host', 'port', 'path', 'query', 'fragment', 'auth', 'authority',
 			'heirarchical', 'uri', 'username', 'hostname', 'authentication'}
 	
@@ -48,10 +48,9 @@ class URI(object):
 	fragment = FragmentPart()
 	
 	# Compound Parts
-	auth = authentication = AuthenticationPart()
-	safe_auth = SafeAuthenticationPart()
+	auth = AuthenticationPart()
+	_safe_auth = SafeAuthenticationPart()
 	authority = AuthorityPart()
-	safe_authority = SafeAuthorityPart()
 	heirarchical = HeirarchicalPart()
 	
 	# Additional Compound Interfaces
@@ -63,7 +62,7 @@ class URI(object):
 	# Common Aliases
 	username = user
 	hostname = host
-	authentication = auth
+	credentials = authentication = auth
 	
 	# Shortcuts
 	
@@ -212,8 +211,8 @@ class URI(object):
 	def __floordiv__(self, other):
 		other = str(other)
 		
-		if '://' in other:
-			_, _, other = other.partition('://')
+		if '//' in other:
+			_, _, other = other.partition('//')
 		
 		return self.__class__(str(self.scheme) + "://" + other)
 	
