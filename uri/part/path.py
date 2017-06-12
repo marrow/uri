@@ -13,10 +13,18 @@ class PathPart(ProxyPart):
 	cast = Path
 	empty = '/'
 	
+	def __get__(self, obj, cls=None):
+		value = super(PathPart, self).__get__(obj, cls)
+		
+		if value is None:
+			value = Path()
+		
+		return value
+	
 	def render(self, obj, value):
 		result = super(PathPart, self).render(obj, value)
 		
-		if result == '.':
+		if result is None or result == '.':
 			if not obj._host:
 				return ''
 			return self.empty

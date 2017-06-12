@@ -39,11 +39,12 @@ class URIPart(object):
 		for part in obj.__slots__:
 			setattr(obj, part, None)
 		
-		result = urlsplit(value)
+		if not value:
+			return
+		
+		result = urlsplit(str(value))
 		
 		for part in ('scheme', 'username', 'password', 'hostname', 'port', 'path', 'query', 'fragment'):
 			pvalue = getattr(result, part)
-			if pvalue is not None:
+			if pvalue:
 				setattr(obj, part, pvalue)
-		
-		obj._uri = value

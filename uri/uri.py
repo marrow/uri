@@ -30,7 +30,7 @@ class URI(object):
 	"""
 	
 	# Skip allocation of a dictionary per instance by pre-defining available slots.
-	__slots__ = ('_uri', '_scheme', '_user', '_password', '_host', '_port', '_path', '_query', '_fragment')
+	__slots__ = ('_scheme', '_user', '_password', '_host', '_port', '_path', '_query', '_fragment')
 	
 	__parts__ = ('scheme', 'authority', 'path', 'query', 'fragment')
 	__safe_parts__ = ('scheme', 'safe_auth', 'host', 'port', 'path', 'query', 'fragment')
@@ -164,12 +164,12 @@ class URI(object):
 	def __setitem__(self, name, value):
 		"""Shortcut for (re)assignment of query string arguments."""
 		
-		self._query[name] = str(value)
+		self.query[name] = str(value)
 	
 	def __delitem__(self, name):
 		"""Shortcut for removal of a query string argument."""
 		
-		del self._query[name]
+		del self.query[name]
 	
 	def __iter__(self):
 		"""Retrieve the query string argument names."""

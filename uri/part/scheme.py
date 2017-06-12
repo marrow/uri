@@ -13,6 +13,7 @@ class SchemePart(Part):
 	valid = r(r'[a-z][a-z0-9+.+-]*')
 	suffix = ':'
 	registry = {'': None}
+	empty = ''
 	
 	def load(self, plugin):
 		if plugin in self.registry:
@@ -42,14 +43,17 @@ class SchemePart(Part):
 		if obj is None: return self
 		scheme = obj._scheme
 		
-		return self.load(scheme)
+		if scheme is not None:
+			scheme = self.load(scheme)
+		
+		return scheme
 	
 	def __set__(self, obj, value):
 		if isinstance(value, bytes):
 			value = value.decode('ascii')
 		
 		if not value:
-			obj._scheme = ''
+			obj._scheme = None
 			return
 		
 		obj._scheme = Scheme(value).name
