@@ -28,7 +28,7 @@ robust as `Vagrant <http://www.vagrantup.com>`__.
 If you add ``uri`` to the ``install_requires`` argument of the call to ``setup()`` in your application's
 ``setup.py`` file, ``uri`` will be automatically installed and made available when your own application or
 library is installed.  We recommend using "less than" version numbers to ensure there are no unintentional
-side-effects when updating.  Use ``uri<3.1`` to get all bugfixes for the current release, and
+side-effects when updating.  Use ``uri<2.1`` to get all bugfixes for the current release, and
 ``uri<3.0`` to get bugfixes and feature updates while ensuring that large breaking changes are not installed.
 
 While uri does not have any hard dependencies on any other package, it is **strongly** recommended that applications
@@ -226,12 +226,12 @@ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
     :target: https://github.com/marrow/uri/issues
     :alt: Github Issues
 
-.. |ghsince| image:: https://img.shields.io/github/commits-since/marrow/uri/1.0.1.svg
+.. |ghsince| image:: https://img.shields.io/github/commits-since/marrow/uri/2.0.0.svg
     :target: https://github.com/marrow/uri/commits/develop
     :alt: Changes since last release.
 
 .. |ghtag| image:: https://img.shields.io/github/tag/marrow/uri.svg
-    :target: https://github.com/marrow/uri/tree/1.0.1
+    :target: https://github.com/marrow/uri/tree/2.0.0
     :alt: Latest Github tagged release.
 
 .. |latestversion| image:: http://img.shields.io/pypi/v/uri.svg?style=flat
