@@ -26,6 +26,7 @@ URI_COMPONENTS = [
 				base = '/foo',
 				summary = '/foo',
 				heirarchical = '/foo',
+				resource = '/foo',
 			)),
 		('http://user:pass@example.com/over/there?name=ferret#anchor', dict(
 				authority = 'user:pass@example.com',
@@ -43,6 +44,7 @@ URI_COMPONENTS = [
 				base = 'http://user:pass@example.com/over/there',
 				summary = 'example.com/over/there',
 				relative = False,
+				resource = '/over/there?name=ferret#anchor',
 			)),
 		
 		# From Wikipedia - https://en.wikipedia.org/wiki/Query_string
@@ -56,6 +58,7 @@ URI_COMPONENTS = [
 				scheme = 'http',
 				summary = 'example.com/over/there',
 				relative = False,
+				resource = '/over/there?name=ferret',
 			)),
 		('http://example.com/path/to/page?name=ferret&color=purple', dict(
 				authority = 'example.com',
@@ -67,6 +70,7 @@ URI_COMPONENTS = [
 				base = 'http://example.com/path/to/page',
 				summary = 'example.com/path/to/page',
 				relative = False,
+				resource = '/path/to/page?name=ferret&color=purple',
 			)),
 		
 		# RFC 3986 (URI) - http://pretty-rfc.herokuapp.com/RFC3986
@@ -79,6 +83,7 @@ URI_COMPONENTS = [
 				base = 'ftp://ftp.is.co.za/rfc/rfc1808.txt',
 				summary = 'ftp.is.co.za/rfc/rfc1808.txt',
 				relative = False,
+				resource = '/rfc/rfc1808.txt',
 			)),
 		('ldap://[2001:db8::7]/c=GB?objectClass?one', dict(
 				authority = '[2001:db8::7]',
@@ -90,6 +95,7 @@ URI_COMPONENTS = [
 				base = 'ldap://[2001:db8::7]/c=GB',
 				summary = '[2001:db8::7]/c=GB',
 				relative = False,
+				resource = '/c=GB?objectClass?one',
 			)),
 		('http://www.ietf.org/rfc/rfc2396.txt', dict(
 				authority = 'www.ietf.org',
@@ -100,6 +106,7 @@ URI_COMPONENTS = [
 				base = 'http://www.ietf.org/rfc/rfc2396.txt',
 				summary = 'www.ietf.org/rfc/rfc2396.txt',
 				relative = False,
+				resource = '/rfc/rfc2396.txt',
 			)),
 		('mailto:John.Doe@example.com', dict(
 				scheme = 'mailto',
@@ -108,6 +115,7 @@ URI_COMPONENTS = [
 				summary = 'John.Doe@example.com',
 				base = 'mailto:John.Doe@example.com',
 				relative = False,
+				resource = 'John.Doe@example.com',
 			)),
 		('tel:+1-816-555-1212', dict(
 				scheme = 'tel',
@@ -116,6 +124,7 @@ URI_COMPONENTS = [
 				summary = '+1-816-555-1212',
 				base = 'tel:+1-816-555-1212',
 				relative = False,
+				resource = '+1-816-555-1212',
 			)),
 		('telnet://192.0.2.16:80/', dict(
 				port = 80,
@@ -127,6 +136,7 @@ URI_COMPONENTS = [
 				summary = '192.0.2.16/',
 				base = 'telnet://192.0.2.16:80/',
 				relative = False,
+				resource = '/',
 			)),
 		('urn:oasis:names:specification:docbook:dtd:xml:4.1.2', dict(
 				scheme = 'urn',
@@ -135,6 +145,7 @@ URI_COMPONENTS = [
 				summary = 'oasis:names:specification:docbook:dtd:xml:4.1.2',
 				base = 'urn:oasis:names:specification:docbook:dtd:xml:4.1.2',
 				relative = False,
+				resource = 'oasis:names:specification:docbook:dtd:xml:4.1.2',
 			)),
 	]
 

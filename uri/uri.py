@@ -58,6 +58,7 @@ class URI(object):
 	safe_uri = URIPart(__safe_parts__, False)  # URI retrieval without password component, useful for logging.
 	base = BasePart()
 	summary = URIPart(('host', 'path'), False)
+	resource = URIPart(('path', 'query', 'fragment'), False)
 	
 	# Common Aliases
 	username = user
