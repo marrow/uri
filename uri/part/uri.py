@@ -16,9 +16,6 @@ class URIPart(object):
 		self.writeable = writeable
 	
 	def __get__(self, obj, cls=None):
-		if not cls:
-			cls = obj.__class__
-		
 		components = []
 		
 		for part in self.parts:
