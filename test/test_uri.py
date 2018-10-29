@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 import pytest
 
-from uri.compat import SENTINEL, Path
+from uri.compat import SENTINEL, Path, str
 from uri.uri import URI
 
 URI_COMPONENTS = [
@@ -267,6 +267,18 @@ class TestURIBasics(object):
 	def test_group_assignment(self, empty):
 		with pytest.raises(TypeError):
 			empty.authority = "bobdole.com"
+	
+	def test_protocol_assignment(self, empty):
+		assert empty.scheme == 'http'
+		
+		empty.scheme = b'ftp'
+		assert empty.scheme == 'ftp'
+	
+	def test_empty_protocol_assignment(self, empty):
+		assert empty.scheme == 'http'
+		
+		empty.scheme = None
+		assert str(empty) == "example.com/over/there"
 
 
 class TestURIDictlike(object):
