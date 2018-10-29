@@ -20,6 +20,7 @@ var
 third-party
 
 # Unit Test / Coverage Reports
+.pytest_cache
 .cache
 .cagoule.db
 .coverage
