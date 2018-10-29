@@ -279,6 +279,10 @@ class TestURIBasics(object):
 		
 		empty.scheme = None
 		assert str(empty) == "example.com/over/there"
+	
+	def test_bad_assignment(self, empty):
+		with pytest.raises(AttributeError):
+			empty.safe_uri = 'http://example.com'
 
 
 class TestURIDictlike(object):
