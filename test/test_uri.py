@@ -263,6 +263,10 @@ class TestURIBasics(object):
 		instance = URI(path)
 		assert instance.scheme == 'file'
 		assert str(instance) == "file:///foo/bar/baz"
+	
+	def test_group_assignment(self, empty):
+		with pytest.raises(TypeError):
+			empty.authority = "bobdole.com"
 
 
 class TestURIDictlike(object):
