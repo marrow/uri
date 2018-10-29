@@ -106,6 +106,11 @@ setup(
 						'ldap = uri.scheme:URLScheme',
 						'telnet = uri.scheme:URLScheme',
 						'sftp = uri.scheme:URLScheme',
+						# Care of https://github.com/APSL/uri/commit/709b4b73daae7b8651b92fd4fa63af41c4db2986
+						'mysql = uri.scheme:URLScheme',
+						'redis = uri.scheme:URLScheme',
+						# https://docs.mongodb.com/manual/reference/connection-string
+						'mongodb = uri.scheme:URLScheme',
 					],
 			},
 )
