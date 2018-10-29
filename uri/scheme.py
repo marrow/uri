@@ -20,6 +20,9 @@ class Scheme(object):
 		if isinstance(other, self.__class__):
 			return self is other
 	
+	def __hash__(self):
+		return hash(self.name)
+	
 	def __neq__(self, other):
 		return not (self == other)
 	
