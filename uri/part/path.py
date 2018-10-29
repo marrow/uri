@@ -23,10 +23,8 @@ class PathPart(ProxyPart):
 		return value
 	
 	def __set__(self, obj, value):
-		try:
-			obj._trailing = str(value).endswith('/')
-		except:
-			obj._trailing = False
+		value = str(value)
+		obj._trailing = value.endswith('/')
 		
 		super(PathPart, self).__set__(obj, value)
 	
