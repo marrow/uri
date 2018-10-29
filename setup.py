@@ -25,7 +25,6 @@ tests_require = [
 		'pytest',  # test collector and extensible runner
 		'pytest-cov',  # coverage reporting
 		'pytest-flakes',  # syntax validation
-		'pytest-catchlog',  # log capture
 		'pytest-isort',  # import ordering
 	]
 
