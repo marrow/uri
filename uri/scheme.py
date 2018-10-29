@@ -34,6 +34,7 @@ class Scheme(object):
 	
 	if py2:
 		__unicode__ = __str__
+		__str__ = __bytes__
 		del __str__
 	
 	def is_relative(self, uri):
