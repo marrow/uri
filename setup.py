@@ -106,6 +106,7 @@ setup(
 						'irc = uri.scheme:URLScheme',
 						'ldap = uri.scheme:URLScheme',
 						'telnet = uri.scheme:URLScheme',
+						'sftp = uri.scheme:URLScheme',
 					],
 			},
 )
