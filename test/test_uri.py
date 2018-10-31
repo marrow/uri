@@ -283,6 +283,17 @@ class TestURIBasics(object):
 	def test_bad_assignment(self, empty):
 		with pytest.raises(AttributeError):
 			empty.safe_uri = 'http://example.com'
+	
+	def test_rooted_path_authority_resolution(self):
+		uri = URI('http://example.com/diz')
+		uri.path = '/foo/bar'
+		assert str(uri) == "http://example.com/foo/bar"
+	
+	def test_rootless_path_authority_error(self):
+		uri = URI('http://example.com')
+		
+		with pytest.raises(ValueError):
+			uri.path = 'foo/bar'
 
 
 class TestURIDictlike(object):
