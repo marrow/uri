@@ -26,6 +26,9 @@ class PathPart(ProxyPart):
 		value = str(value)
 		obj._trailing = value.endswith('/')
 		
+		if obj.authority and not value.startswith('/'):
+			raise ValueError("Can only assign rooted paths to URI with authority.")
+		
 		super(PathPart, self).__set__(obj, value)
 	
 	def render(self, obj, value):
