@@ -22,9 +22,6 @@ class URIPart(object):
 			value = getattr(obj, part)
 			part = getattr(cls, part)
 			
-			if value is None:
-				continue
-			
 			components.append(part.render(obj, value))
 		
 		return "".join(components)

@@ -278,7 +278,7 @@ class TestURIBasics(object):
 		assert empty.scheme == 'http'
 		
 		empty.scheme = None
-		assert str(empty) == "example.com/over/there"
+		assert str(empty) == "//example.com/over/there"
 	
 	def test_bad_assignment(self, empty):
 		with pytest.raises(AttributeError):

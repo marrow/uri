@@ -37,6 +37,9 @@ class SchemePart(Part):
 		if obj._scheme and obj.scheme.slashed:
 			result = result + '//'
 		
+		if not obj._scheme and obj.authority:
+			result = '//'
+		
 		return result
 	
 	def __get__(self, obj, cls=None):
