@@ -2,7 +2,7 @@
 uri
 ===
 
-    © 2017 Alice Bevan-McGregor and contributors.
+    © 2017-2018 Alice Bevan-McGregor and contributors.
 
 ..
 
@@ -139,6 +139,9 @@ use, is to use the division and floor division operators::
     js = cdn / "script.js"
     css = cdn / "script.css"
 
+Please note that once a URI has an "authority" part (basically, the parts prior to the path such as host) then any
+path directly assigned must be "rooted", or contain a leading slash.
+
 
 Schemes
 -------
@@ -150,6 +153,22 @@ fields.  Examples include: ``http``, ``https``, ``ftp``, ``mailto``, ``file``, `
 
 Version History
 ===============
+
+Version 2.0.1
+-------------
+
+* Added non-standard `resource` compound view.
+* Removed Python 3.3 support, added 3.7, removed deprecated testing dependency.
+* Scheme objects hash as per their string representation. #5
+* Dead code clean-up.
+* Additional tests covering previously uncovered edge cases, such as assignment to a compound view property.
+* Restrict assignment of rootless paths (no leading `/`) if an authority part is already present. #8
+* Enable handling of the following schemes as per URL (colon + double slash):
+	* sftp
+	* mysql
+	* redis
+	* mongodb
+
 
 Version 2.0
 -----------
@@ -171,7 +190,7 @@ The URI package has been released under the MIT Open Source license.
 The MIT License
 ---------------
 
-Copyright © 2017 Alice Bevan-McGregor and contributors.
+Copyright © 2017-2018 Alice Bevan-McGregor and contributors.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
