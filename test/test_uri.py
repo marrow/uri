@@ -300,6 +300,13 @@ class TestURIDictlike(object):
 	def test_get(self, instance):
 		assert instance['name'] == 'ferret'
 	
+	def test_get_authenticated(self, instance):
+		secure = instance['username':'password']
+		assert instance is not secure
+		assert secure.user == 'username'
+		assert secure.password == 'password'
+		assert str(secure) == 'http://username:password@example.com/over/there?name=ferret#anchor'
+	
 	def test_set_new(self, instance, empty):
 		instance['foo'] = 'bar'
 		assert str(instance) == 'http://user:pass@example.com/over/there?name=ferret&foo=bar#anchor'
