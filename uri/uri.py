@@ -157,7 +157,23 @@ class URI(object):
 	# Python Mapping Protocol
 	
 	def __getitem__(self, name):
-		"""Shortcut for retrieval of a query string argument."""
+		"""Shortcut for retrieval of a query string argument or syntax sugar to apply a username:password pair.
+		
+		For example:
+		
+			url = URI("http://example.com/hello?name=world")
+			url['name'] == 'world'
+		
+		Alternatively:
+		
+			url = URI("http://example.com/hello")
+			authd_url = url['username':'password']
+		"""
+		
+		if isinstance(name, slice):
+			self = self.__class__(str(self))  # We do not mutate ourselves; instead, mutate a clone.
+			self.user, self.password = name.start, name.stop
+			return self
 		
 		return self.query[name]
 	
