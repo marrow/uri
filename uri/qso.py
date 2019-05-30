@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from collections import Mapping, MutableMapping, deque, namedtuple
+from collections import Mapping, MutableMapping, namedtuple
 
 from .bucket import Bucket
 from .compat import SENTINEL, py2, quote_plus, str, unquote_plus
