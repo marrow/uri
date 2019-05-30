@@ -2,9 +2,7 @@
 
 from __future__ import unicode_literals
 
-from collections import ItemsView, KeysView, MutableMapping, MutableSequence, ValuesView, deque, namedtuple
-
-from .compat import SENTINEL, py2, quote_plus, str, unquote_plus
+from .compat import py2, quote_plus, str, unquote_plus
 
 
 class Bucket(object):
@@ -47,18 +45,18 @@ class Bucket(object):
 		
 		return name if match else None, value if match else name
 	
-	def __repr__(self):
-		return "{}({})".format(
-				self.__class__.__name__,
-				str(self)
-			)
-	
 	if py2:
 		def __repr__(self):
 			return "{}({})".format(
 					self.__class__.__name__,
 					str(self)
 				).encode('unicode-escape')
+	else:
+		def __repr__(self):
+			return "{}({})".format(
+					self.__class__.__name__,
+					str(self)
+				)
 	
 	def __iter__(self):
 		if self.name is not None:  # XXX: Confirm that empty string is permissible.
@@ -71,7 +69,7 @@ class Bucket(object):
 	
 	def __str__(self):
 		# Certain symbols are explicitly allowed, ref: http://pretty-rfc.herokuapp.com/RFC3986#query
-		iterator = (quote_plus(i).replace('%3F', '?').replace('%2F', '/') for i in self) if self.valid else self
+		iterator = (quote_plus(i.encode('utf8')).replace('%3F', '?').replace('%2F', '/') for i in self) if self.valid else self
 		return self.sep.join(iterator)
 	
 	if py2:
