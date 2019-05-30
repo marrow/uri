@@ -8,6 +8,7 @@
 *.egg-info
 .eggs
 .packaging
+dist
 
 # Virtual Environment Pseudo-Chroot
 bin
