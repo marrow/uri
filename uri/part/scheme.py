@@ -21,8 +21,6 @@ class SchemePart(Part):
 		if plugin in self.registry:
 			return self.registry[plugin]
 		
-		# TODO: Entry point namespace use for plugin discovery.
-		
 		try:
 			result, = iter_entry_points('uri.scheme', plugin)
 			result = result.load()(plugin)
@@ -39,7 +37,7 @@ class SchemePart(Part):
 		if obj._scheme and obj.scheme.slashed:
 			result = result + '//'
 		
-		if not obj._scheme and obj.authority:
+		elif not obj._scheme and obj.authority:
 			result = '//'
 		
 		return result
