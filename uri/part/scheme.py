@@ -10,6 +10,8 @@ from ..scheme import Scheme
 
 
 class SchemePart(Part):
+	__slots__ = ()
+	
 	valid = r(r'[a-z][a-z0-9+.+-]*')
 	suffix = ':'
 	registry = {'': None}

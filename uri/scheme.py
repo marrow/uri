@@ -42,6 +42,8 @@ class Scheme(object):
 
 
 class URLScheme(Scheme):
+	__slots__ = ()
+	
 	slashed = True  # DO include // separator between scheme and remainder.
 	
 	def is_relative(self, uri):

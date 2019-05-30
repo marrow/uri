@@ -9,6 +9,8 @@ from ..compat import Path, str
 
 
 class PathPart(ProxyPart):
+	__slots__ = ()
+	
 	attribute = '_path'
 	cast = Path
 	empty = '/'

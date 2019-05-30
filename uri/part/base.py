@@ -23,6 +23,8 @@ class Part(object):
 
 
 class ProxyPart(Part):
+	__slots__ = ()
+	
 	attribute = None
 	cast = str
 	
@@ -61,4 +63,6 @@ class GroupPart(Part):
 
 
 class BasePart(GroupPart):
+	__slots__ = ()
+	
 	attributes = ('scheme', 'heirarchical')

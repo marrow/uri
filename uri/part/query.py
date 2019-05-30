@@ -8,6 +8,8 @@ from .base import ProxyPart
 
 
 class QueryPart(ProxyPart):
+	__slots__ = ()
+	
 	attribute = '_query'
 	prefix = '?'
 	terminator = '#'

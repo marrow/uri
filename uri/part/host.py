@@ -8,6 +8,8 @@ from .base import ProxyPart
 
 
 class HostPart(ProxyPart):
+	__slots__ = ()
+	
 	attribute = '_host'
 	
 	def render(self, obj, value):
