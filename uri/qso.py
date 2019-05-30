@@ -59,6 +59,10 @@ class QSO(object):
 	def __str__(self):
 		return self.separator.join(str(bucket) for bucket in self.buckets)
 	
+	if py2:
+		__unicode__ = __str__
+		del __str__
+	
 	# ABC Protocol Methods
 	
 	def __contains__(self, value):  # Container, Collection
