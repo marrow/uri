@@ -8,6 +8,9 @@ addons:
     token:
       secure: "a4sgEt0pqOFHTysCYOivgMORNrx80tbovuVXFMXfal8fXdJZWynSmw0Ulte+maWOQJ50f9Owo/UAPY0Em36wMeIi96j5ZTtLEkPYcnU12NW823t8Dkd1l5BImqpeE8B9A+hlJLnHx8RCbQ3WA1hxemrS8rrJHzy5Kr1S5c4GbEGKOOHBQ7jYU1dfnB7Gdu/BzY1bmitDkAKEysa/8mQ60JzVxv6/bsiNAr15iv+pwmUwOPni26j3+wSZKY1j5b2mlTqmRH7/aPBVRTDRYEBBGKgGHb0nprho74fKLmT5LCYoDovoSni6P8Pvf6APM0FonomaXTLin8Muhj0DRMBaFmBp0B1azHkXJB6e7K91aHRW1HG9lr8iN2dh+IxyBQY6jT0ajvnmU3eghHtYJtWulVoKaUbvMmoAs9Vl0n4orc4cq/3uma7VURF8UKb+4xy8dB+O9EtbugQ/dINfiNXhrToKK8WzzMHrze4Jvq+PaWjTO99fYeXpku8CHa0h8JG+RaP8HhXNpZS4RLSvAAHjZOSN1jtIvIWGuDeqfXuhkrWtZVDZOAT2eMqU/ziPqOReuhWcwCB0z89QNVIdaakBZ9BFJWOw+9j545FS+GYLJYdyQa61/h+YZblu7uYMjDsaShe0pjM60qOpRIvXrYJb8/HJBZ9IhmaTUY6gcBcTM5s="
 
+git:
+  depth: false
+
 branches:
   except:
       - /^[^/]+/.+$/
