@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from collections import Mapping, MutableMapping
+from collections.abc import Mapping, MutableMapping
 from re import compile as r
 
 from .compat import Path, str, py2, urlsplit, urljoin

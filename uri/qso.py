@@ -2,7 +2,8 @@
 
 from __future__ import unicode_literals
 
-from collections import Mapping, MutableMapping, namedtuple
+from collections import namedtuple
+from collections.abc import Mapping, MutableMapping
 
 from .bucket import Bucket
 from .compat import SENTINEL, py2, quote_plus, str, unquote_plus
