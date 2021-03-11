@@ -1,13 +1,11 @@
-# encoding: utf-8
-
 """Tests representative of examples provided within the URI RFC 3986."""
 
 import pytest
 
-from uri.uri import URI
+from uri import URI
 
 
-class ReferenceResolutionExample(object):
+class ReferenceResolutionExample:
 	"""As defined by the preface of section 5.4, these examples utilize a defined base URI.
 	
 	Reference: https://pretty-rfc.herokuapp.com/RFC3986#reference-examples

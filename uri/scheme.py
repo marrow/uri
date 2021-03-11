@@ -1,11 +1,4 @@
-# encoding: utf-8
-
-from __future__ import unicode_literals
-
-from .compat import str, py2
-
-
-class Scheme(object):
+class Scheme:
 	__slots__ = ('name', )
 	
 	slashed = False  # Do NOT include // separator between scheme and remainder.
@@ -31,11 +24,6 @@ class Scheme(object):
 	
 	def __str__(self):
 		return self.name
-	
-	if py2:
-		__unicode__ = __str__
-		__str__ = __bytes__
-		del __str__
 	
 	def is_relative(self, uri):
 		return False

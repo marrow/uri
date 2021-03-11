@@ -1,7 +1,3 @@
-# encoding: utf-8
-
-from __future__ import unicode_literals
-
 from socket import inet_pton, AF_INET6, error as SocketError
 
 from .base import ProxyPart

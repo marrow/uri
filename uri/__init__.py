@@ -1,10 +1,9 @@
-# encoding: utf-8
-
 """A type to represent, query, and manipulate a Uniform Resource Identifier."""
+
+from pathlib import PurePosixPath as Path
 
 from .release import version as __version__
 
-from .compat import Path
 from .bucket import Bucket
 from .qso import QSO
 from .uri import URI

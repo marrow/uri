@@ -1,11 +1,8 @@
-# encoding: utf-8
-
-from __future__ import unicode_literals
-
 from collections.abc import Mapping, MutableMapping
+from pathlib import PurePosixPath as Path
 from re import compile as r
+from urllib.parse import urljoin
 
-from .compat import Path, str, py2, urlsplit, urljoin
 from .part.auth import AuthenticationPart, SafeAuthenticationPart
 from .part.authority import AuthorityPart
 from .part.base import BasePart
@@ -27,7 +24,7 @@ SERVICES = {  # "Default" port numbers, TODO: load from or ship /etc/services
 	}
 
 
-class URI(object):
+class URI:
 	"""An object representing a URI (absolute or relative) and its components.
 	
 	Acts as a mutable mapping for manipulation of query string arguments. If the query string is not URL
@@ -148,10 +145,6 @@ class URI(object):
 		
 		return self.uri.encode('utf-8')
 	
-	if py2:  # Adapt to Python 2 semantics on legacy versions.
-		__unicode__ = __str__
-		__str__ = __bytes__
-	
 	# Python Comparison Protocol
 	
 	def __eq__(self, other):
@@ -179,9 +172,6 @@ class URI(object):
 		"""Truthyness comparison."""
 		
 		return bool(self.uri)
-	
-	if py2:
-		__nonzero__ = __bool__
 	
 	# Python Mapping Protocol
 	

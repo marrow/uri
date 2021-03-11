@@ -1,15 +1,13 @@
-# encoding: utf-8
-
-from __future__ import unicode_literals
-
 from collections import namedtuple
 from collections.abc import Mapping, MutableMapping
 
 from .bucket import Bucket
-from .compat import SENTINEL, py2, quote_plus, str, unquote_plus
 
 
-class QSO(object):
+SENTINEL = object()
+
+
+class QSO:
 	"""A representation of a query string or parameter list.
 	
 	Acts as an ordered list of bucketed values, optionally with associated key names. Values are retrievable by index
@@ -59,10 +57,6 @@ class QSO(object):
 	
 	def __str__(self):
 		return self.separator.join(str(bucket) for bucket in self.buckets)
-	
-	if py2:
-		__unicode__ = __str__
-		del __str__
 	
 	# ABC Protocol Methods
 	

@@ -1,13 +1,8 @@
-# encoding: utf-8
-
-from __future__ import unicode_literals
-
 from operator import attrgetter
+from re import compile as r
 
-from ..compat import str, py2, r
 
-
-class Part(object):
+class Part:
 	"""Descriptor protocol objects for combantorial string parts with validation."""
 	
 	__slots__ = ()

@@ -1,14 +1,9 @@
-# encoding: utf-8
-
-from __future__ import unicode_literals
-
 from collections.abc import MutableMapping
 from re import compile as r
+from urllib.parse import urlsplit
 
-from ..compat import Path, str, py2, urlsplit
 
-
-class URIPart(object):
+class URIPart:
 	__slots__ = ('parts', 'writeable')
 	
 	def __init__(self, parts, writeable=True):

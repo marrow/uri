@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 """Functional and representative tests for the URI datatype/representation."""
-
-from __future__ import unicode_literals
 
 import pytest
 
-from uri.compat import SENTINEL, Path, str
+from uri import Path
+from uri.qso import SENTINEL
 from uri.uri import URI
 
 URI_COMPONENTS = [
@@ -179,7 +176,7 @@ def test_wsgi_unpacking():
 
 
 @pytest.mark.parametrize('string,attributes', URI_COMPONENTS)
-class TestURI(object):
+class TestURI:
 	def test_truthiness(self, string, attributes):
 		instance = URI(string)
 		assert instance
@@ -216,7 +213,7 @@ class TestURI(object):
 		assert value == attributes[component]
 
 
-class TestURIBasics(object):
+class TestURIBasics:
 	def test_uri_error(self):
 		with pytest.raises(TypeError):
 			URI(foo="bar")
@@ -309,7 +306,7 @@ class TestURIBasics(object):
 			uri.path = 'foo/bar'
 
 
-class TestURIDictlike(object):
+class TestURIDictlike:
 	def test_get(self, instance):
 		assert instance['name'] == 'ferret'
 	

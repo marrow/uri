@@ -1,11 +1,6 @@
-# encoding: utf-8
-
-from __future__ import unicode_literals
-
 import pytest
 
 from uri.bucket import Bucket
-from uri.compat import str
 
 EXAMPLES = [
 		# String,       Arguments,         Name,    Value,      Valid
@@ -27,7 +22,7 @@ EXAMPLES = [
 
 
 @pytest.mark.parametrize('string,args,name,value,valid', EXAMPLES)
-class TestBucketExamples(object):
+class TestBucketExamples:
 	def test_string_identity(self, string, args, name, value, valid):
 		bucket = Bucket(string)
 		assert str(bucket) == string
@@ -67,7 +62,7 @@ class TestBucketExamples(object):
 
 
 @pytest.mark.parametrize('string,args,name,value,valid', [i for i in EXAMPLES if not i[4]])
-class TestBucketExamplesInvalid(object):
+class TestBucketExamplesInvalid:
 	def test_strict_string_failure(self, string, args, name, value, valid):
 		with pytest.raises(ValueError):
 			Bucket(string, strict=True)

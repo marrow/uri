@@ -1,11 +1,6 @@
-# encoding: utf-8
-
-from __future__ import unicode_literals
-
 import pytest
 
-from uri.compat import SENTINEL, str
-from uri.qso import QSO, Bucket
+from uri.qso import QSO, SENTINEL, Bucket
 
 EXAMPLES = [
 		# Abstract
@@ -102,7 +97,7 @@ COMPARISON_EXAMPLES = [
 	]
 
 
-class TestQSO(object):
+class TestQSO:
 	@pytest.mark.parametrize('string,values', MULTI_VALUE_EXAMPLES)
 	def test_multiple_values(self, string, values):
 		instance = QSO(string)
@@ -248,7 +243,7 @@ class TestQSO(object):
 
 
 @pytest.mark.parametrize('string,args,kw', EXAMPLES)
-class TestQSOExamples(object):
+class TestQSOExamples:
 	def test_repr(self, string, args, kw):
 		instance = QSO(string)
 		assert repr(instance) == 'QSO("' + string + '")'
@@ -280,7 +275,7 @@ class TestQSOExamples(object):
 
 
 @pytest.mark.parametrize('string,args,kw', [i for i in EXAMPLES if i[1]])
-class TestQSOPositionalUse(object):
+class TestQSOPositionalUse:
 	def test_iteration_view(self, string, args, kw):
 		instance = QSO(string)
 		
@@ -289,7 +284,7 @@ class TestQSOPositionalUse(object):
 
 
 @pytest.mark.parametrize('string,args,kw', [i for i in EXAMPLES if i[2]])
-class TestQSOKeywordUse(object):
+class TestQSOKeywordUse:
 	def test_contains(self, string, args, kw):
 		instance = QSO(string)
 		
@@ -311,7 +306,7 @@ class TestQSOKeywordUse(object):
 
 
 @pytest.mark.parametrize('string,args,kw', [i for i in EXAMPLES if len(i[1]) > 1])
-class TestQSOMultiplePositional(object):
+class TestQSOMultiplePositional:
 	def test_reversing(self, string, args, kw):
 		instance = QSO(string)
 		result = list(reversed(instance))

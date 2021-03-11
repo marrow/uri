@@ -1,11 +1,7 @@
-# encoding: utf-8
-
-from __future__ import unicode_literals
-
-from .compat import py2, quote_plus, str, unquote_plus
+from urllib.parse import quote_plus, unquote_plus
 
 
-class Bucket(object):
+class Bucket:
 	"""A bucket is a mutable container for an optionally named scalar value."""
 	
 	__slots__ = ('name', 'value', 'sep', 'valid')
@@ -45,18 +41,11 @@ class Bucket(object):
 		
 		return name if match else None, value if match else name
 	
-	if py2:
-		def __repr__(self):
-			return "{}({})".format(
-					self.__class__.__name__,
-					str(self)
-				).encode('unicode-escape')
-	else:
-		def __repr__(self):
-			return "{}({})".format(
-					self.__class__.__name__,
-					str(self)
-				)
+	def __repr__(self):
+		return "{}({})".format(
+				self.__class__.__name__,
+				str(self)
+			)
 	
 	def __iter__(self):
 		if self.name is not None:  # XXX: Confirm that empty string is permissible.
@@ -71,7 +60,3 @@ class Bucket(object):
 		# Certain symbols are explicitly allowed, ref: http://pretty-rfc.herokuapp.com/RFC3986#query
 		iterator = (quote_plus(i.encode('utf8')).replace('%3F', '?').replace('%2F', '/') for i in self) if self.valid else self
 		return self.sep.join(iterator)
-	
-	if py2:
-		__unicode__ = __str__
-		del __str__

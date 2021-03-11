@@ -1,11 +1,7 @@
-# encoding: utf-8
-
-from __future__ import unicode_literals
-
 from pkg_resources import iter_entry_points
+from re import compile as r
 
 from .base import Part
-from ..compat import py2, r
 from ..scheme import Scheme
 
 
