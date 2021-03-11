@@ -149,7 +149,16 @@ Schemes
 
 Each URI has a scheme which should be registered with the `Internet Assigned Numbers Authority (IANA)
 <https://en.m.wikipedia.org/wiki/Internet_Assigned_Numbers_Authority>`_ which specifies the mechanics of the URI
-fields.  Examples include: ``http``, ``https``, ``ftp``, ``mailto``, ``file``, ``data``, etc.
+fields. Examples include: ``http``, ``https``, ``ftp``, ``mailto``, ``file``, ``data``, etc.
+
+The declaration of which schemes are URL-like (featuring a `://` double-slashed separator) is based on Python's
+``entry_points`` plugin registry mapping scheme names to the ``Scheme`` objects used to handle them. If a scheme
+renders URI-like when your application requires URL-like, you can `utilize package metadata
+<https://packaging.python.org/guides/creating-and-discovering-plugins/#using-package-metadata>`_ to register
+additional mappings.
+
+For an example, and to see the core set handled this way, examine the ``setup.py`` and ``setup.cfg`` files within the
+project.
 
 
 WSGI
@@ -178,10 +187,10 @@ Version 3.0.0
 * Removed legacy Python 2 support adaptions.
 * Removed Python 3 support less than Python 3.6 due to type annotation syntax changes.
 * Updated ABC import path references to correct Python 3.9 warnings.
-* Added syntax sugar for assignment of URI authentication credentials by returning a mutated instance when sliced.
+* Added syntax sugar for assignment of URI authentication credentials by returning a mutated instance when sliced. #10
 * Additional ``__slots__`` declarations to improve memory efficiency.
 * Added RFC example relative resolutions as tests.
-* Added the ability to construct a URI from a populated WSGI request environment to reconstruct the requested URI.
+* Added the ability to construct a URI from a populated WSGI request environment to reconstruct the requested URI. #13
 * Migrated from Travis-CI to GitHub Actions for test runner automation.
 
 
