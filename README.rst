@@ -164,7 +164,7 @@ To perform this task, use the ``URI.from_wsgi`` factory method::
 
     from webob import Request
 
-    req = Request.blank('https://example.com/foo/bar?baz=27')
+    request = Request.blank('https://example.com/foo/bar?baz=27')
     uri = URI.from_wsgi(request)
     assert str(uri) == 'https://example.com/foo/bar?baz=27'
 
