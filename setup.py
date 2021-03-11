@@ -11,10 +11,8 @@ except ImportError:
 	from setuptools import setup, find_packages
 
 
-if sys.version_info < (2, 7):
-	raise SystemExit("Python 2.7 or later is required.")
-elif sys.version_info > (3, 0) and sys.version_info < (3, 2):
-	raise SystemExit("Python 3.2 or later is required.")
+if sys.version_info < (3, 6):
+	raise SystemExit("Python 3.6 or later is required.")
 
 version = description = url = author = version_info = ''  # Actually loaded on the next line; be quiet, linter.
 exec(open(os.path.join("uri", "release.py")).read())
@@ -54,14 +52,11 @@ setup(
 			"License :: OSI Approved :: MIT License",
 			"Operating System :: OS Independent",
 			"Programming Language :: Python",
-			"Programming Language :: Python :: 2",
-			"Programming Language :: Python :: 2.7",
 			"Programming Language :: Python :: 3",
-			"Programming Language :: Python :: 3.2",
-			"Programming Language :: Python :: 3.3",
-			"Programming Language :: Python :: 3.4",
-			"Programming Language :: Python :: 3.5",
 			"Programming Language :: Python :: 3.6",
+			"Programming Language :: Python :: 3.7",
+			"Programming Language :: Python :: 3.8",
+			"Programming Language :: Python :: 3.9",
 			"Programming Language :: Python :: Implementation :: CPython",
 			"Programming Language :: Python :: Implementation :: PyPy",
 			"Topic :: Software Development :: Libraries :: Python Modules",
@@ -79,14 +74,17 @@ setup(
 			'pytest-runner',
 		] if {'pytest', 'test', 'ptr'}.intersection(sys.argv) else [],
 	
-	install_requires = [
-			'pathlib2; python_version < "3.4"',  # Path manipulation utility.
-		],
+	install_requires = [],  # URI has no runtime dependencies.
 	
 	extras_require = dict(
 			http = ['requests'],  # Support for the http:// and https:// protocols.
 			development = tests_require + [  # Development-time dependencies.
 					'pre-commit',  # Commit hooks for code quality.
+					'mypy',  # Type hinting analysis.
+					'rope',  # Project symbols collection.
+					'bandit',  # Automated security analysis.
+					'ptipython',  # Enhanced interactive REPL shell.
+					'e',  # python -me
 				],
 		),
 	
