@@ -2,7 +2,7 @@
 uri
 ===
 
-    © 2017-2018 Alice Bevan-McGregor and contributors.
+    © 2017-2021 Alice Bevan-McGregor and contributors.
 
 ..
 
@@ -90,7 +90,8 @@ exposing a ``__link__`` method or attribute::
 The *scalar* attributes are combined into several *compound* groups for convienence:
 
 * The ``credentials`` are a colon (``:``) separated combination of: ``user`` + ``password`` — also accessible via the
-  shorter ``auth`` or the longer ``authentication`` attributes.
+  shorter ``auth`` or the longer ``authentication`` attributes. May be assigned using array/mapping notation.
+  Accessing ``uri[user:pass]`` will return a mutated instance with credentials included.
 * The ``authority`` part is the combination of: ``credentials`` + ``host`` + ``port``
 * The ``heirarchical`` part is the combination of: ``authority`` part + ``path``
 
@@ -151,8 +152,38 @@ Each URI has a scheme which should be registered with the `Internet Assigned Num
 fields.  Examples include: ``http``, ``https``, ``ftp``, ``mailto``, ``file``, ``data``, etc.
 
 
+WSGI
+----
+
+A WSGI request environment contains all of the details required to reconstruct the requested URI. The simplest example
+of why one might do this is to form a "base URI" for relative resolution. WSGI environment-wrapping objects such as
+WebOb's ``Request`` class instances may be used as long as the object passed in exposes the original WSGI environment
+using an attribute named ``environ``.
+
+To perform this task, use the ``URI.from_wsgi`` factory method::
+
+    from webob import Request
+
+    req = Request.blank('https://example.com/foo/bar?baz=27')
+    uri = URI.from_wsgi(request)
+    assert str(uri) == 'https://example.com/foo/bar?baz=27'
+
+
 Version History
 ===============
+
+Version 3.0.0
+-------------
+
+* Removed legacy Python 2 support adaptions.
+* Removed Python 3 support less than Python 3.6 due to type annotation syntax changes.
+* Updated ABC import path references to correct Python 3.9 warnings.
+* Added syntax sugar for assignment of URI authentication credentials by returning a mutated instance when sliced.
+* Additional ``__slots__`` declarations to improve memory efficiency.
+* Added RFC example relative resolutions as tests.
+* Added the ability to construct a URI from a populated WSGI request environment to reconstruct the requested URI.
+* Migrated from Travis-CI to GitHub Actions for test runner automation.
+
 
 Version 2.0.1
 -------------
@@ -190,7 +221,7 @@ The URI package has been released under the MIT Open Source license.
 The MIT License
 ---------------
 
-Copyright © 2017-2018 Alice Bevan-McGregor and contributors.
+Copyright © 2017-2021 Alice Bevan-McGregor and contributors.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
