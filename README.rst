@@ -157,8 +157,17 @@ renders URI-like when your application requires URL-like, you can `utilize packa
 <https://packaging.python.org/guides/creating-and-discovering-plugins/#using-package-metadata>`_ to register
 additional mappings.
 
-For an example, and to see the core set handled this way, examine the ``setup.py`` and ``setup.cfg`` files within the
-project.
+For an example, and to see the core set handled this way, examine the ``setup.py`` and ``setup.cfg`` files within this
+project. If you wish to imperatively define schemes, you can do so with code such as the following. It is **strongly
+recommended** to not implement this as an *import time side effect*. To mutate the plugin registry directly::
+
+    from uri.scheme import URLScheme
+    from uri.part.scheme import SchemePart
+    
+    SchemePart.registry['amqp'] = URLScheme('amqp')
+    SchemePart.registry['amqps'] = URLScheme('amqps')
+
+Subsequent attempts to resolve ``entry_points`` by these names will now resolve to the objects you have specified.
 
 
 WSGI
@@ -166,8 +175,8 @@ WSGI
 
 A WSGI request environment contains all of the details required to reconstruct the requested URI. The simplest example
 of why one might do this is to form a "base URI" for relative resolution. WSGI environment-wrapping objects such as
-WebOb's ``Request`` class instances may be used as long as the object passed in exposes the original WSGI environment
-using an attribute named ``environ``.
+`WebOb's <https://webob.org>`_ ``Request`` class instances may be used as long as the object passed in exposes the
+original WSGI environment using an attribute named ``environ``.
 
 To perform this task, use the ``URI.from_wsgi`` factory method::
 
@@ -184,13 +193,17 @@ Version History
 Version 3.0.0
 -------------
 
+* Improved documentation, notably, incorporated the imperative registration of schemes example from `#14
+  <https://github.com/marrow/uri/issues/14#issuecomment-667567337>`_.
 * Removed legacy Python 2 support adaptions.
 * Removed Python 3 support less than Python 3.6 due to type annotation syntax changes.
 * Updated ABC import path references to correct Python 3.9 warnings.
-* Added syntax sugar for assignment of URI authentication credentials by returning a mutated instance when sliced. #10
+* Added syntax sugar for assignment of URI authentication credentials by returning a mutated instance when sliced. `#10
+  <https://github.com/marrow/uri/issues/10>`_
 * Additional ``__slots__`` declarations to improve memory efficiency.
 * Added RFC example relative resolutions as tests.
-* Added the ability to construct a URI from a populated WSGI request environment to reconstruct the requested URI. #13
+* Added ability to construct a URI from a populated WSGI request environment to reconstruct the requested URI. `#13
+  <https://github.com/marrow/uri/issues/13>`_ WebOb added as a testing dependency to cover this feature.
 * Migrated from Travis-CI to GitHub Actions for test runner automation.
 
 
