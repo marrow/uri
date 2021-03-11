@@ -65,6 +65,29 @@ class URI(object):
 	hostname = host
 	credentials = authentication = auth
 	
+	# Factories
+	
+	@classmethod
+	def from_wsgi(URI, environ):
+		if hasattr(environ, 'environ'):  # Incidentally support passing of a variety of Request object wrappers.
+			environ = environ.environ
+		
+		scheme = environ['wsgi.url_scheme']
+		
+		uri = URI(
+				scheme = environ['wsgi.url_scheme'],
+				host = environ['SERVER_NAME'],
+				path = environ['SCRIPT_NAME'] + environ['PATH_INFO'],
+				query = environ['QUERY_STRING']
+			)
+		
+		# Handled this way to automatically elide default port numbers.
+		if scheme == 'http' and environ['SERVER_PORT'] != 80 or\
+				scheme == 'https' and environ['SERVER_PORT'] != 443:
+			uri.port = environ['SERVER_PORT']
+		
+		return uri
+	
 	# Shortcuts
 	
 	@property
