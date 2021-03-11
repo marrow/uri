@@ -2,6 +2,7 @@ from collections.abc import Mapping, MutableMapping
 from pathlib import PurePosixPath as Path
 from re import compile as r
 from urllib.parse import urljoin
+from socket import getservbyname
 
 from .part.auth import AuthenticationPart, SafeAuthenticationPart
 from .part.authority import AuthorityPart
@@ -17,11 +18,6 @@ from .part.scheme import SchemePart
 from .part.uri import URIPart
 from .part.user import UserPart
 
-
-SERVICES = {  # "Default" port numbers, TODO: load from or ship /etc/services
-		'http': 80,
-		'https': 443,
-	}
 
 
 class URI:
@@ -85,7 +81,7 @@ class URI:
 			)
 		
 		# Handled this way to automatically elide default port numbers.
-		service = SERVICES.get(scheme, None)
+		service = getservbyname(scheme)
 		port = int(environ['SERVER_PORT'])
 		if not service or service != port: uri.port = port
 		
