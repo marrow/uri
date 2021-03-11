@@ -147,7 +147,7 @@ path directly assigned must be "rooted", or contain a leading slash.
 Schemes
 -------
 
-Each URI has a scheme should be registered with the `Internet Assigned Numbers Authority (IANA)
+Each URI has a scheme that should be registered with the `Internet Assigned Numbers Authority (IANA)
 <https://en.m.wikipedia.org/wiki/Internet_Assigned_Numbers_Authority>`_ and specifies the mechanics of the URI
 fields. Examples include: ``http``, ``https``, ``ftp``, ``mailto``, ``file``, ``data``, etc.
 
