@@ -81,7 +81,7 @@ class URI(object):
 		scheme = environ['wsgi.url_scheme']
 		
 		uri = URI(
-				scheme = environ['wsgi.url_scheme'],
+				scheme = scheme,
 				host = environ['SERVER_NAME'],
 				path = environ['SCRIPT_NAME'] + environ['PATH_INFO'],
 				query = environ['QUERY_STRING']
@@ -90,9 +90,7 @@ class URI(object):
 		# Handled this way to automatically elide default port numbers.
 		service = SERVICES.get(scheme, None)
 		port = int(environ['SERVER_PORT'])
-		if service and service != port: uri.port = port
-		
-		str(uri)
+		if not service or service != port: uri.port = port
 		
 		return uri
 	
