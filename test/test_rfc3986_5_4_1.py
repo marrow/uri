@@ -2,11 +2,8 @@
 
 """Tests representative of examples provided within the URI RFC 3986."""
 
-from __future__ import unicode_literals
-
 import pytest
 
-from uri.compat import str
 from uri.uri import URI
 
 
