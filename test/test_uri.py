@@ -167,6 +167,17 @@ def empty():
 	return URI('http://example.com/over/there')
 
 
+def test_wsgi_unpacking():
+	webob = pytest.importorskip('webob')
+	
+	url = 'https://example.com/foo/bar?baz=27'
+	
+	request = webob.Request.blank(url)
+	uri = URI.from_wsgi(request)
+	
+	assert str(uri) == url
+
+
 @pytest.mark.parametrize('string,attributes', URI_COMPONENTS)
 class TestURI(object):
 	def test_truthiness(self, string, attributes):
