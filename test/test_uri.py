@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+"""Functional and representative tests for the URI datatype/representation."""
+
 from __future__ import unicode_literals
 
 import pytest
