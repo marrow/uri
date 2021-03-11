@@ -21,6 +21,12 @@ from .part.uri import URIPart
 from .part.user import UserPart
 
 
+SERVICES = {  # "Default" port numbers, TODO: load from or ship /etc/services
+		'http': 80,
+		'https': 443,
+	}
+
+
 class URI(object):
 	"""An object representing a URI (absolute or relative) and its components.
 	
@@ -82,9 +88,11 @@ class URI(object):
 			)
 		
 		# Handled this way to automatically elide default port numbers.
-		if scheme == 'http' and environ['SERVER_PORT'] != 80 or\
-				scheme == 'https' and environ['SERVER_PORT'] != 443:
-			uri.port = environ['SERVER_PORT']
+		service = SERVICES.get(scheme, None)
+		port = int(environ['SERVER_PORT'])
+		if service and service != port: uri.port = port
+		
+		str(uri)
 		
 		return uri
 	
