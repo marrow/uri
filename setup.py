@@ -70,6 +70,7 @@ setup(
 	zip_safe = False,
 	
 	# ## Dependency Declaration
+	python_requires = ">=3.6",
 	
 	setup_requires = [
 			'pytest-runner',
