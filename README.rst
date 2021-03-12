@@ -212,10 +212,11 @@ Version 2.0.1
 
 * Added non-standard `resource` compound view.
 * Removed Python 3.3 support, added 3.7, removed deprecated testing dependency.
-* Scheme objects hash as per their string representation. #5
+* Scheme objects hash as per their string representation. `#5 <https://github.com/marrow/uri/issues/5>`_
 * Dead code clean-up.
 * Additional tests covering previously uncovered edge cases, such as assignment to a compound view property.
-* Restrict assignment of rootless paths (no leading `/`) if an authority part is already present. #8
+* Restrict assignment of rootless paths (no leading `/`) if an authority part is already present. `#8
+  <https://github.com/marrow/uri/issues/8>`_
 * Enable handling of the following schemes as per URL (colon + double slash):
 	* sftp
 	* mysql
