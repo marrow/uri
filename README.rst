@@ -205,6 +205,7 @@ Version 3.0.0
 * Added ability to construct a URI from a populated WSGI request environment to reconstruct the requested URI. WebOb
   added as a testing dependency to cover this feature. `#13 <https://github.com/marrow/uri/issues/13>`_
 * Migrated from Travis-CI to GitHub Actions for test runner automation.
+* Added a significant number of additional pre-registered URL-like (``://``) schemes, based on Wikipedia references.
 
 
 Version 2.0.1
