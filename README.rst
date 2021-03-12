@@ -41,8 +41,8 @@ Development Version
 
     |developstatus| |developcover| |ghsince| |issuecount| |ghfork|
 
-Development takes place on `GitHub <https://github.com/>`__ in the
-`uri <https://github.com/marrow/uri/>`__ project.  Issue tracking, documentation, and downloads
+Development takes place on `GitHub <https://github.com/>`__ in the `uri
+<https://github.com/marrow/uri/>`__ project.  Issue tracking, documentation, downloads, and test automation
 are provided there.
 
 Installing the current development version requires `Git <http://git-scm.com/>`__, a distributed source code management
