@@ -201,9 +201,9 @@ Version 3.0.0
 * Added syntax sugar for assignment of URI authentication credentials by returning a mutated instance when sliced. `#10
   <https://github.com/marrow/uri/issues/10>`_
 * Additional ``__slots__`` declarations to improve memory efficiency.
-* Added RFC example relative resolutions as tests.
-* Added ability to construct a URI from a populated WSGI request environment to reconstruct the requested URI. `#13
-  <https://github.com/marrow/uri/issues/13>`_ WebOb added as a testing dependency to cover this feature.
+* Added RFC example relative resolutions as tests; we are a compatible resolver, not a strict one.
+* Added ability to construct a URI from a populated WSGI request environment to reconstruct the requested URI. WebOb
+  added as a testing dependency to cover this feature. `#13 <https://github.com/marrow/uri/issues/13>`_
 * Migrated from Travis-CI to GitHub Actions for test runner automation.
 
 
