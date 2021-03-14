@@ -84,4 +84,3 @@ class TestAbnormalExamples(ReferenceResolutionExample):
 	def test_resolution_equivalence(self, href, result):
 		resolved = self.BASE.resolve(href)
 		assert str(resolved) == result
-
