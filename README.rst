@@ -385,7 +385,7 @@ Version 3.0.0
 * Improved documentation, notably, incorporated the imperative registration of schemes example from `#14
   <https://github.com/marrow/uri/issues/14#issuecomment-667567337>`_.
 * Removed legacy Python 2 support adaptions.
-* Removed Python 3 support less than Python 3.6 due to type annotation syntax changes.
+* Removed Python 3 support less than Python 3.8 due to type annotation functionality and syntax changes.
 * Updated ABC import path references to correct Python 3.9 warnings.
 * Added syntax sugar for assignment of URI authentication credentials by returning a mutated instance when sliced. `#10
   <https://github.com/marrow/uri/issues/10>`_

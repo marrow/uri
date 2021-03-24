@@ -11,8 +11,8 @@ except ImportError:
 	from setuptools import setup, find_packages
 
 
-if sys.version_info < (3, 6):
-	raise SystemExit("Python 3.6 or later is required.")
+if sys.version_info < (3, 8):
+	raise SystemExit("Python 3.8 or later is required.")
 
 version = description = url = author = version_info = ''  # Actually loaded on the next line; be quiet, linter.
 exec(open(os.path.join("uri", "release.py")).read())
@@ -54,8 +54,6 @@ setup(
 			"Operating System :: OS Independent",
 			"Programming Language :: Python",
 			"Programming Language :: Python :: 3",
-			"Programming Language :: Python :: 3.6",
-			"Programming Language :: Python :: 3.7",
 			"Programming Language :: Python :: 3.8",
 			"Programming Language :: Python :: 3.9",
 			"Programming Language :: Python :: Implementation :: CPython",
@@ -70,7 +68,7 @@ setup(
 	zip_safe = False,
 	
 	# ## Dependency Declaration
-	python_requires = ">=3.6",
+	python_requires = ">=3.8",
 	
 	setup_requires = [
 			'pytest-runner',
