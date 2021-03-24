@@ -37,6 +37,6 @@ htmlcov
 .DS_Store
 
 # Completion Integration
+.mypy_cache
 .ropeproject
 tags
-
