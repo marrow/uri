@@ -1,9 +1,10 @@
 from collections.abc import Mapping, MutableMapping
 from pathlib import PurePosixPath as Path
 from re import compile as r
-from urllib.parse import urljoin
 from socket import getservbyname
+from urllib.parse import urljoin
 
+from .typing import Union, URILike, Optional
 from .part.auth import AuthenticationPart, SafeAuthenticationPart
 from .part.authority import AuthorityPart
 from .part.base import BasePart
@@ -17,7 +18,7 @@ from .part.query import QueryPart
 from .part.scheme import SchemePart
 from .part.uri import URIPart
 from .part.user import UserPart
-
+from .scheme import Scheme, SchemeLike
 
 
 class URI:
@@ -37,14 +38,14 @@ class URI:
 			'heirarchical', 'uri', 'username', 'hostname', 'authentication'}
 	
 	# Scalar Parts
-	scheme = SchemePart()
-	user = UserPart()
-	password = PasswordPart()
-	host = HostPart()
-	port = PortPart()
-	path = PathPart()
+	scheme:Union[str, Scheme] = SchemePart()
+	user:str = UserPart()
+	password:str = PasswordPart()
+	host:str = HostPart()
+	port:int = PortPart()
+	path:Union[str, Path] = PathPart()
 	query = QueryPart()
-	fragment = FragmentPart()
+	fragment:Optional[str] = FragmentPart()
 	
 	# Compound Parts
 	auth = AuthenticationPart()
@@ -56,18 +57,21 @@ class URI:
 	uri = URIPart(__parts__)  # Whole-URI retrieval or storage as string.
 	safe_uri = URIPart(__safe_parts__, False)  # URI retrieval without password component, useful for logging.
 	base = BasePart()
+	origin = URIPart(('scheme', 'host', 'port'), False)
 	summary = URIPart(('host', 'path'), False)
 	resource = URIPart(('path', 'query', 'fragment'), False)
+	defrag = URIPart(tuple([i for i in __all_parts__ if i != 'fragment']))  # Fragments are not sent to web servers.
 	
 	# Common Aliases
 	username = user
 	hostname = host
-	credentials = authentication = auth
+	credentials = authentication = userinfo = auth
+	netloc = authority
 	
 	# Factories
 	
 	@classmethod
-	def from_wsgi(URI, environ):
+	def from_wsgi(URI, environ) -> 'URI':
 		if hasattr(environ, 'environ'):  # Incidentally support passing of a variety of Request object wrappers.
 			environ = environ.environ
 		
@@ -90,17 +94,17 @@ class URI:
 	# Shortcuts
 	
 	@property
-	def qs(self):
+	def qs(self) -> str:
 		query = self.query
 		return str(query) if query else ""
 	
 	@qs.setter
-	def qs(self, value):
+	def qs(self, value) -> None:
 		self.query = value
 	
 	# Python Object Protocol
 	
-	def __init__(self, _uri=None, **parts):
+	def __init__(self, _uri:Optional[URILike]=None, **parts) -> None:
 		"""Initialize a new URI from a passed in string and/or named parts.
 		
 		If both a base URI and parts are supplied than the parts will override those present in the URI.
@@ -269,6 +273,9 @@ class URI:
 				address = escape(self.uri),
 				summary = escape(self.summary),
 			)
+	
+	def geturl(self):  # API compatibility with urllib.
+		return str(self)
 	
 	@property
 	def relative(self):
