@@ -187,6 +187,195 @@ To perform this task, use the ``URI.from_wsgi`` factory method::
     assert str(uri) == 'https://example.com/foo/bar?baz=27'
 
 
+Migrating
+=========
+
+A vast majority of other URI parsers emit plain dictionaries or provide ``as_dict`` methods. URI objects can be
+transformed into such using a fairly basic "dictionary comprehension"::
+
+    uri = URI('http://www.example.com/3.0/dd/ff/')
+    {i: getattr(uri, i) for i in dir(uri) if i[0] != '_' and not callable(getattr(uri, i))}
+
+The above will produce a dictionary of all URI attributes that are not "private" (prefixed by an underscore) or
+executable methods.
+
+
+From ``furl``
+-------------
+
+* A majority of the object attributes have parity: ``scheme``, ``username``, ``password``, ``host``, even ``origin``.
+* ``furl.args`` -> ``URI.query``
+* ``furl.add()``, ``furl.set()``, ``furl.remove()`` -> inline, chained manipulation is not supported.
+* ``furl.url`` -> ``str(uri)`` or ``URI.uri``
+* ``furl.netloc`` -> ``URI.authority``
+* Fragments do not have ``path`` and ``query`` attributes; under ``URI`` the fragment is a pure string.
+* ``furl.path`` -> ``URI.path`` where ``furl`` implements its own, ``URI.path`` are PurePosixPath instances.
+* ``furl.join`` is accomplished via division operators under ``URI``, or for more complete relative resolution, use
+  the ``URI.resolve`` method.
+* The ``URI`` class does not currently infer protocol-specific default port numbers.
+* Manipulation via division operators preserves query string parameters under ``furl``, however the ``URI`` package
+  assumes relative URL resolution, which updates the path and clears parameters and fragment. To extend the path while
+  preserving these::
+  
+      uri = URI('http://www.google.com/base?one=1&two=2')
+      uri.path /= 'path'
+      assert str(uri) == 'http://www.google.com/base/path?one=1&two=2'
+
+
+From ``dj-mongohq-url``
+-----------------------
+
+> https://github.com/ferrix/dj-mongohq-url
+
+Where your ``settings.py`` file's ``DATABASES`` declaration used ``dj_mongohq_url.config``, instead use::
+
+    from uri.parse.db import parse_dburi
+    
+    DATABASES = {'default': parse_dburi('mongodb://...')}
+
+
+From ``django-url-tools``
+-------------------------
+
+> https://bitbucket.org/monwara/django-url-tools
+
+The majority of the ``UrlHelper`` attributes are directly applicable to ``URI`` instances, occasionally with minor
+differences, typically of naming. The differences are documented here, and "template tags" and "filters" are not
+provided for.
+
+* Where ``UrlHelper.path`` are plain strings, ``URI.path`` attributes are `PurePosixPath
+  <https://docs.python.org/3/library/pathlib.html#pure-paths>_` instances which support typecasting to a string if
+  needed.
+
+* ``UrlHelper.query_dict`` and ``UrlHelper.query`` are replaced with the dict-like ``URI.query`` attribute.
+
+* ``UrlHelper.query_string`` is shortened to ``URI.qs``, additionally, the object retrieved when accessing ``query``
+  may be cast to a string as per the rich path representation.
+
+* ``UrlHelper.get_full_path`` -- equivalent to the ``URI.resource`` compound, combining path, query string, and
+  fragment identifier.
+
+* ``UrlHelper.get_full_quoted_path`` -- alternative currently not provided.
+
+* There are no direct equivalents provided for:
+
+  * ``UrlHelper.hash`` is **not** provided due to FIPS-unsafe dependence on MD5.
+  * ``UrlHelper.get_query_string`` -- encoding is handled automatically.
+  * ``UrlHelper.get_query_data`` -- this helper for subclass inheritance is not provided.
+  * ``UrlHelper.update_query_data`` -- manipulate the query directly using ``URI.query.update``.
+  * ``UrlHelper.overload_params`` -- can be accomplished using modern dictionary merge literal syntax.
+  * ``UrlHelper.toggle_params`` -- this seems an unusual use case, and can be resolved similarly to the last.
+  * ``UrlHelper.get_path`` -- unnecessary, access ``URI.path`` directly.
+  * ``UrlHelper.del_param`` and ``UrlHelper.del_params`` -- just utilize the ``del`` keyword (or ``pop`` method) on/of
+    the ``URI.query`` attribute.
+
+
+From ``url2vapi``
+-----------------
+
+> https://github.com/Drachenfels/url2vapi
+
+Where ``url2vapi`` provides a dictionary of parsed URL components, with some pattern-based extraction of API metadata,
+``URI`` provides a rich object with descriptor attributes. Version parsing can be accomplished by extracting the
+relevant path element and parsing it::
+
+    from pkg_resources import parse_version
+    from uri import URI
+    
+    url = 'http://www.example.com/3.0/dd/ff/'
+    uri = URI(url)
+    version = parse_version(uri.path.parts[1])
+
+The ``ApiUrl`` class otherwise offers no functionality. The minimal "data model" provided only accounts for:
+
+* ``protocol`` -> ``scheme``
+* ``port`` is common, though URI port numbers are stored as integers, not strings.
+* ``domain`` -> ``host``
+* ``remainder`` does not have an equivalent; there are several compound getters which may provide similar results.
+* ``kwargs`` also has no particular equivalent. URI instances are not "arbitrarily extensible".
+* Parsing of URL "parameters" incorrectly assume these are exclusive to the referenced resource, as per query string
+  arguments, when each path element may have its own distinct parameters. The difference between::
+  
+      https://example.com/foo/bar/baz?prop=27
+      https://example.com/foo/bar/baz;prop=27
+  
+  And::
+  
+      https://example.com/foo;prop=27/bar/baz;prop=27
+      https://example.com/foo/bar;prop=27/baz
+      https://example.com/foo/bar/baz;prop=27
+
+
+From ``url-parser``
+-------------------
+
+* ``protocol`` -> ``scheme``
+* ``www`` has no equivalent; check for ``URI.host.startswith('www.')`` instead.
+* ``sub_domain`` has no equivalent; parse/split ``URI.host`` instead.
+* ``domain`` -> ``host``
+* ``top_domain`` has no equivalent; as per ``sub_domain``.
+* ``dir`` -> ``path``
+* ``file`` -> ``path``
+* ``fragment`` is unchanged.
+* ``query`` -> ``qs`` for the string form, ``query`` for a rich ``QSO`` instance interface.
+
+
+From ``purl``
+-------------
+
+There may be a noticeable trend arising from several sections of "migrating from". Many seem to have accessor or
+manipulation **methods** to mutate the object, rather than utilizing native data type interactions, this one does not
+buck the trend. Additionally, many of the "attributes" of ``Purl`` are provided as invokable getter/setter methods,
+not as static attributes nor automatic properties. In this comparison, attributes trailed by parenthesis are actually
+methods, if ``[value]`` may be passed, the method is also the setter. Lastly, it provides its own ``InvalidUrlError``
+which does not subclass ``ValueError``.
+
+The result is a bit of a hodgepodge API that feels more at home in Java.
+
+* ``Purl.query`` is a plain dictionary attribute, not a getter method. Now a rich dict-like ``QSO`` object.
+* ``Purl.querystring()`` -> ``URI.qs`` -- pure getter method in ``Purl``.
+* ``Purl.add_query()`` and ``Purl.delete_query()`` -- just manipulate ``URI.query`` as a dictionary.
+* An alternative to ``param`` for manipulation of path parameters is not provided, as these are protocol-defined.
+* ``Purl.protocol([value])`` -> ``URI.scheme``
+* ``Purl.hostname([value])`` -> ``URI.host``
+* ``Purl.port([value])`` -> ``URI.port``
+* ``Purl.path([value])`` -> ``URI.path``
+* "Parameter expansion" (which is unrelated to actual URI path element parameters) is not currently supported;
+  recommended to simply use f-strings or ``str.format`` as appropriate. As curly braces have no special meaning to
+  ``URI``, you may populate these within one for later ``str(uri).format(...)`` interpolation.
+
+
+From ``url``
+------------
+
+The ``url`` package bundles Cython auto-generated C++ extensions. I do not understand why.
+
+It's nearly 16,000 lines of code.
+
+Sixteen thousand.
+
+A number of attributes are common such as ``scheme``, ``host``, ``hostname``, ``port``, etc.
+
+* ``URL.pld`` and ``URL.tld`` are left as an exercise for the reader.
+* ``URL.params`` is not currently implemented.
+* ``URL.query`` -> ``URI.qs`` with ``URI.query`` providing a rich dict-like interface.
+* ``URL.unicode`` and ``URL.utf8`` are unimplemented. Native ``URI`` storage is Unicode, it's up to you to encode.
+* ``URL.strip()`` is unnecessary under ``URI``; empty query strings, fragments, etc., naturally will not have
+  dividers. What many might consider to be an "invalid" query string often are not; an encoding for HTTP key-value
+  pairs is suggested for the HTTP scheme, however everything after the ``?`` is just a single string, up to server-
+  side interpretation. ``?????a=1`` is "perfectly fine".
+* Re-ordering of query string parameters is not implemented; the need is dubious at this level.
+* ``URL.deparam()`` may be implemented by using `del` to remove known query string arguments, or using the ``pop()``
+  method to safely remove arguments that may only be conditionally present, while avoiding exceptions.
+* ``URL.abspath()`` is not currently implemented; to be implemented within ``URI.resolve()``.
+* ``URL.unescape()`` is not currently implemented.
+* ``URL.relative()`` may be implemented more succinctly using division operators, e.g. ``base / target``. This also
+  supports HTTP reference protocol-relative resolution using the floor division operator, e.g. ``base // target``.
+* ``URL.punycode()`` and ``URL.unpunycode()`` are not implemented, as the goal is for Unicode to be natively/naturally
+  supported with Punycode encoding automatic at instantiation and serialization to string time.
+
+
+
 Version History
 ===============
 
