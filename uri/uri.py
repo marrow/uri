@@ -274,8 +274,7 @@ class URI:
 				summary = escape(self.summary),
 			)
 	
-	def geturl(self):  # API compatibility with urllib.
-		return str(self)
+	geturl = __str__  # API compatibility with urllib.
 	
 	@property
 	def relative(self):
