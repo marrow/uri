@@ -1,20 +1,30 @@
 from operator import attrgetter
-from re import compile as r
+from re import compile as r, Pattern
+
+from ..typing import abstractmethod, Optional, Stringy, T, Iterable
 
 
 class Part:
-	"""Descriptor protocol objects for combantorial string parts with validation."""
+	"""Descriptor protocol objects for combinatorial string parts with validation."""
 	
 	__slots__ = ()
 	
-	valid = r(r'.*')
-	prefix = ''
-	suffix = ''
-	empty = ''
+	valid: Pattern = r(r'.*')
+	prefix: str = ''
+	suffix: str = ''
+	empty: str = ''
 	
-	def render(self, obj, value):
+	def render(self, obj, value:Optional[Stringy]) -> str:
 		if not value: return self.empty
 		return self.prefix + str(value) + self.suffix
+	
+	@abstractmethod
+	def __get__(self, obj, cls:Optional[T]=None):
+		pass
+	
+	@abstractmethod
+	def __set__(self, obj, value) -> None:
+		pass
 
 
 class ProxyPart(Part):
@@ -27,7 +37,7 @@ class ProxyPart(Part):
 		if obj is None: return self
 		return getattr(obj, self.attribute)
 	
-	def __set__(self, obj, value):
+	def __set__(self, obj, value:Optional[Stringy]) -> None:
 		if value == b'':
 			value = None
 		
@@ -38,12 +48,12 @@ class ProxyPart(Part):
 
 
 class GroupPart(Part):
-	__slots__ = ('_getters', '_join')
+	__slots__ = ()
 	
-	attributes = ()
-	sep = ''
+	attributes:Iterable[str] = ()
+	sep:str = ''
 	
-	def __get__(self, obj, cls=None):
+	def __get__(self, obj, cls=None) -> str:
 		if obj is None: return self
 		
 		cls = obj.__class__
