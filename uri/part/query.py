@@ -1,5 +1,11 @@
+from ..typing import Iterable, Mapping, Union
+
 from ..qso import QSO
 from .base import ProxyPart
+
+
+# There has to be a better placeholder for "acceptable to dict() or dict.update()".
+QSOLike = Union[str, QSO, Mapping[str, str], Iterable[Iterable[str]]]
 
 
 class QueryPart(ProxyPart):
@@ -10,7 +16,7 @@ class QueryPart(ProxyPart):
 	terminator = '#'
 	cast = QSO
 	
-	def __get__(self, obj, cls=None):
+	def __get__(self, obj, cls=None) -> QSO:
 		result = super(QueryPart, self).__get__(obj, cls)
 		
 		if result is None:
@@ -18,7 +24,7 @@ class QueryPart(ProxyPart):
 		
 		return result
 	
-	def __set__(self, obj, value):
+	def __set__(self, obj, value:QSOLike):
 		if value is None:
 			value = ''
 		
