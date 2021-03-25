@@ -203,6 +203,8 @@ executable methods.
 From ``furl``
 -------------
 
+    https://github.com/gruns/furl
+
 * A majority of the object attributes have parity: ``scheme``, ``username``, ``password``, ``host``, even ``origin``.
 * ``furl.args`` -> ``URI.query``
 * ``furl.add()``, ``furl.set()``, ``furl.remove()`` -> inline, chained manipulation is not supported.
@@ -225,7 +227,7 @@ From ``furl``
 From ``dj-mongohq-url``
 -----------------------
 
-> https://github.com/ferrix/dj-mongohq-url
+    https://github.com/ferrix/dj-mongohq-url
 
 Where your ``settings.py`` file's ``DATABASES`` declaration used ``dj_mongohq_url.config``, instead use::
 
@@ -237,7 +239,7 @@ Where your ``settings.py`` file's ``DATABASES`` declaration used ``dj_mongohq_ur
 From ``django-url-tools``
 -------------------------
 
-> https://bitbucket.org/monwara/django-url-tools
+    https://bitbucket.org/monwara/django-url-tools
 
 The majority of the ``UrlHelper`` attributes are directly applicable to ``URI`` instances, occasionally with minor
 differences, typically of naming. The differences are documented here, and "template tags" and "filters" are not
@@ -259,7 +261,7 @@ provided for.
 
 * There are no direct equivalents provided for:
 
-  * ``UrlHelper.hash`` is **not** provided due to FIPS-unsafe dependence on MD5.
+  * ``UrlHelper.hash`` -- **not** provided due to FIPS-unsafe dependence on MD5.
   * ``UrlHelper.get_query_string`` -- encoding is handled automatically.
   * ``UrlHelper.get_query_data`` -- this helper for subclass inheritance is not provided.
   * ``UrlHelper.update_query_data`` -- manipulate the query directly using ``URI.query.update``.
@@ -273,7 +275,7 @@ provided for.
 From ``url2vapi``
 -----------------
 
-> https://github.com/Drachenfels/url2vapi
+    https://github.com/Drachenfels/url2vapi
 
 Where ``url2vapi`` provides a dictionary of parsed URL components, with some pattern-based extraction of API metadata,
 ``URI`` provides a rich object with descriptor attributes. Version parsing can be accomplished by extracting the
@@ -309,6 +311,8 @@ The ``ApiUrl`` class otherwise offers no functionality. The minimal "data model"
 From ``url-parser``
 -------------------
 
+    https://github.com/AdaptedAS/url_parser
+
 * ``protocol`` -> ``scheme``
 * ``www`` has no equivalent; check for ``URI.host.startswith('www.')`` instead.
 * ``sub_domain`` has no equivalent; parse/split ``URI.host`` instead.
@@ -320,8 +324,10 @@ From ``url-parser``
 * ``query`` -> ``qs`` for the string form, ``query`` for a rich ``QSO`` instance interface.
 
 
-From ``purl``
--------------
+From ``p.url``
+--------------
+
+    https://github.com/ultrabluewolf/p.url/
 
 There may be a noticeable trend arising from several sections of "migrating from". Many seem to have accessor or
 manipulation **methods** to mutate the object, rather than utilizing native data type interactions, this one does not
@@ -348,6 +354,8 @@ The result is a bit of a hodgepodge API that feels more at home in Java.
 From ``url``
 ------------
 
+    https://github.com/seomoz/url-py
+
 The ``url`` package bundles Cython auto-generated C++ extensions. I do not understand why.
 
 It's nearly 16,000 lines of code.
@@ -372,7 +380,8 @@ A number of attributes are common such as ``scheme``, ``host``, ``hostname``, ``
 * ``URL.relative()`` may be implemented more succinctly using division operators, e.g. ``base / target``. This also
   supports HTTP reference protocol-relative resolution using the floor division operator, e.g. ``base // target``.
 * ``URL.punycode()`` and ``URL.unpunycode()`` are not implemented, as the goal is for Unicode to be natively/naturally
-  supported with Punycode encoding automatic at instantiation and serialization to string time.
+  supported with Punycode encoding automatic at instantiation and serialization to string time, reference `#18
+  <https://github.com/marrow/uri/issues/18>`_.
 
 
 
@@ -384,8 +393,11 @@ Version 3.0.0
 
 * Improved documentation, notably, incorporated the imperative registration of schemes example from `#14
   <https://github.com/marrow/uri/issues/14#issuecomment-667567337>`_.
+* Inclusion of adaption utilities and tests obviating the need for other utility packages, and documented migration
+  from several other URI or URL implementations.
 * Removed legacy Python 2 support adaptions.
 * Removed Python 3 support less than Python 3.8 due to type annotation functionality and syntax changes.
+* Broad adoption of type hinting annotations across virtually all methods and instance attributes.
 * Updated ABC import path references to correct Python 3.9 warnings.
 * Added syntax sugar for assignment of URI authentication credentials by returning a mutated instance when sliced. `#10
   <https://github.com/marrow/uri/issues/10>`_
@@ -395,6 +407,8 @@ Version 3.0.0
   added as a testing dependency to cover this feature. `#13 <https://github.com/marrow/uri/issues/13>`_
 * Migrated from Travis-CI to GitHub Actions for test runner automation.
 * Added a significant number of additional pre-registered URL-like (``://``) schemes, based on Wikipedia references.
+* Automatically utilize Punycode / IDNA encoding of internationalized domain names, ones containing non-ASCII. `#18
+  <https://github.com/marrow/uri/issues/18>`_
 
 
 Version 2.0.1
