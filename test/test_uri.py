@@ -72,6 +72,114 @@ URI_COMPONENTS = [
 				resource = '/path/to/page?name=ferret&color=purple',
 			)),
 		
+		# From whatwg-url test_special_cases.py
+		('http://1.1.1.1 &@2.2.2.2/# @3.3.3.3', dict(  # test_spaces_with_multiple_ipv4_addresses **
+				scheme = 'http',
+				authority = '1.1.1.1 &@2.2.2.2',  # **
+				heirarchical = '1.1.1.1 &@2.2.2.2/',
+				auth = '1.1.1.1 &',  # **
+				authentication = '1.1.1.1 &',  # **
+				user = '1.1.1.1 &',  # **
+				username = '1.1.1.1 &',  # **
+				password = None,
+				host = '2.2.2.2',
+				fragment = ' @3.3.3.3',
+				path = Path('/'),
+				relative = False,
+				summary = '2.2.2.2/',
+				base = 'http://1.1.1.1 &@2.2.2.2/',
+			)),
+		('http://google.com/#@evil.com/', dict(  # test_fragment_with_hostname **
+				scheme = 'http',
+				authority = 'google.com',
+				heirarchical = 'google.com/',
+				host = 'google.com',
+				path = Path('/'),
+				fragment = '@evil.com/',
+				relative = False,
+				base = 'http://google.com/',
+				summary = 'google.com/',
+			)),
+		('http://foo@evil.com:80@google.com/', dict(  # test_multiple_ats_within_authority
+				scheme = 'http',
+				authority = 'foo@evil.com:80@google.com',
+				auth = 'foo@evil.com:80',
+				heirarchical = 'foo@evil.com:80@google.com/',
+				host = 'google.com',
+				user = 'foo@evil.com',  # **
+				password = '80',
+				path = Path('/'),
+				summary = 'google.com/',
+				authentication = 'foo@evil.com:80',
+				relative = False,
+				base = 'http://foo@evil.com:80@google.com/',
+				username = 'foo@evil.com',
+			)),
+		('http://foo@evil.com:80 @google.com/', dict(  # test_multiple_ats_and_space_within_authority **
+				scheme = 'http',
+				authority = 'foo@evil.com:80 @google.com',
+				authentication = 'foo@evil.com:80 ',
+				heirarchical = 'foo@evil.com:80 @google.com/',
+				host = 'google.com',
+				user = 'foo@evil.com',  # **
+				username = 'foo@evil.com',  # **
+				password = '80 ',  # **
+				path = Path('/'),
+				auth = 'foo@evil.com:80 ',
+				relative = False,
+				summary = 'google.com/',
+				base = 'http://foo@evil.com:80 @google.com/',
+			)),
+		('http://orange.tw/sandbox/ＮＮ/passwd', dict(  # test_unicode_double_dot_if_stripped_bom
+				scheme = 'http',
+				authority = 'orange.tw',
+				heirarchical = 'orange.tw/sandbox/ＮＮ/passwd',
+				host = 'orange.tw',
+				path = Path('/sandbox/ＮＮ/passwd'),  # **
+				relative = False,
+				summary = 'orange.tw/sandbox/ＮＮ/passwd',
+				base = 'http://orange.tw/sandbox/ＮＮ/passwd',
+			)),
+		('http://127.0.0.1\tfoo.google.com/', dict(  # test_host_contains_tab_in_authority **
+				scheme = 'http',
+				authority = '127.0.0.1\tfoo.google.com',
+				heirarchical = '127.0.0.1\tfoo.google.com/',
+				host = '127.0.0.1\tfoo.google.com',  # **
+				path = Path('/'),
+				relative = False,
+				base = 'http://127.0.0.1\tfoo.google.com/',
+				summary = '127.0.0.1\tfoo.google.com/',
+			)),
+		# Omitted: test_host_contains_tab_in_authority_single_or_double_encoded, test_injection_within_authority
+		('http://localhost\\@google.com:12345/', dict(  # test_backslash_within_authority **
+				scheme = 'http',
+				authority = 'localhost\\@google.com:12345',
+				auth = 'localhost\\',
+				authentication = 'localhost\\',
+				heirarchical = 'localhost\\@google.com:12345/',
+				user = 'localhost\\',
+				username = 'localhost\\',
+				host = 'google.com',  # **
+				port = 12345,
+				path = Path('/'),  # **
+				relative = False,
+				base = 'http://localhost\\@google.com:12345/',
+				summary = 'google.com/',
+			)),
+		
+		#('', dict(
+		#		authority = '',
+		#		heirarchical = '',
+		#		host = '',
+		#		path = Path(''),
+		#		query = '',
+		#		base = '',
+		#		scheme = 'http',
+		#		summary = '',
+		#		relative = False,
+		#		resource = '/',
+		#	)),
+		
 		# RFC 3986 (URI) - http://pretty-rfc.herokuapp.com/RFC3986
 		('ftp://ftp.is.co.za/rfc/rfc1808.txt', dict(
 				authority = 'ftp.is.co.za',
@@ -265,6 +373,14 @@ class TestURIBasics:
 	def test_resolution_by_uri(self, instance):
 		assert str(instance.resolve('/baz')) == "http://user:pass@example.com/baz"
 		assert str(instance.resolve('baz')) == "http://user:pass@example.com/over/baz"
+		
+		# From whatwg-url test_special_cases.py::test_relative_url_with_url_contained
+		url = URI('https://www.google.com').resolve('/redirect?target=http://localhost:61020/')
+		
+		assert url.scheme == 'https'
+		assert url.host == 'www.google.com'
+		assert url.path == Path('/redirect')
+		assert str(url.query) == "target=http%3A//localhost%3A61020/"  # **
 	
 	def test_resolution_overriding(self, instance):
 		expect = "http://example.com/over/there?name=ferret#anchor"
