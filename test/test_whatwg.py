@@ -1,5 +1,7 @@
 """Functional and representative tests for the URI datatype/representation."""
 
+from urllib.parse import urljoin, urlparse
+
 import pytest
 
 from uri import Path
@@ -32,42 +34,6 @@ URI_COMPONENTS = [
 				summary = 'www.google.com/',
 				base = 'https://www.google.com/',
 			)),
-#		('', dict(  # 
-#				scheme = '',
-#				authority = '',
-#				heirarchical = '',
-#				auth = '',
-#				authentication = '',
-#				user = '',
-#				username = '',
-#				password = None,
-#				host = '',
-#				port = ,
-#				hostname = '',
-#				fragment = '',
-#				path = Path(''),
-#				relative = False,
-#				summary = '',
-#				base = '',
-#			)),
-		#('', dict(
-		#		scheme = '',
-		#		authority = '',
-		#		heirarchical = '',
-		#		auth = '',
-		#		authentication = '',
-		#		user = '',
-		#		username = '',
-		#		password = None,
-		#		host = '',
-		#		port = ,
-		#		hostname = '',
-		#		fragment = '',
-		#		path = Path(''),
-		#		relative = False,
-		#		summary = '',
-		#		base = '',
-		#	)),
 		
 		# From test_special_cases.py
 		('http://1.1.1.1 &@2.2.2.2/# @3.3.3.3', dict(  # test_spaces_with_multiple_ipv4_addresses **
@@ -162,19 +128,6 @@ URI_COMPONENTS = [
 				base = 'http://localhost\\@google.com:12345/',
 				summary = 'google.com/',
 			)),
-		
-		#('', dict(
-		#		authority = '',
-		#		heirarchical = '',
-		#		host = '',
-		#		path = Path(''),
-		#		query = '',
-		#		base = '',
-		#		scheme = 'http',
-		#		summary = '',
-		#		relative = False,
-		#		resource = '/',
-		#	)),
 	]
 
 for _uri, _parts in URI_COMPONENTS:
@@ -194,7 +147,7 @@ def empty():
 
 
 @pytest.mark.parametrize('string,attributes', URI_COMPONENTS)
-class TestURI:
+class TestWhatwgURI:
 	def test_truthiness(self, string, attributes):
 		instance = URI(string)
 		assert instance
@@ -312,3 +265,56 @@ class TestWhatwgURL:
 		
 		assert not url.query  # ** It isn't literally None, but it is falsy if omitted or empty.
 		assert str(url) == "https://www.google.com/"
+		# The above is due to the fact that `.query` returns a rich, dict-like object which permits mutation.
+		# Assigning None just clears this mutable structure.
+	
+	def test_url_fragment(self):
+		url = URI("https://www.google.com")
+		url.fragment = "abc"
+		
+		assert url.fragment == "abc"
+		assert str(url) == "https://www.google.com/#abc"
+		
+		url.fragment = ""
+		
+		assert url.fragment == ""
+		assert str(url) == "https://www.google.com/"  # ** None and an empty string are both interpreted as "none".
+		
+		url.fragment = None
+		
+		assert url.fragment is None
+		assert str(url) == "https://www.google.com/"
+	
+	def test_url_origin(self):  # ** Not _entirely_ the same, as the components come back recombined, not as a tuple.
+		url = URI("https://www.google.com")
+		assert url.origin == "https://www.google.com"
+	
+	@pytest.mark.xfail(reason="Need to look into definition of 'origin' for URI generally.")
+	def test_url_blob_origin(self):
+		url = URI("blob:https://www.google.com")
+		
+		assert url.origin == URI("https://www.google.com").origin
+
+
+@pytest.mark.parametrize(('base', 'href', 'expected'), [
+		("http://www.google.com/", "", "http://www.google.com/"),
+		("http://www.google.com/", "/", "http://www.google.com/"),
+		("http://www.google.com/", "maps/", "http://www.google.com/maps/"),
+		("http://www.google.com/", "one/two/", "http://www.google.com/one/two/"),
+		("http://www.google.com/mail", "/maps/", "http://www.google.com/maps/"),
+		("http://www.google.com/", "./", "http://www.google.com/"),
+		("http://www.google.com/maps", "..", "http://www.google.com/"),
+		("http://www.google.com/", "https://www.google.com/", "https://www.google.com/"),
+		("http://www.google.com/", "https://maps.google.com/", "https://maps.google.com/"),
+		("https://www.google.com/", "https://www.google.com:1234/", "https://www.google.com:1234/"),
+		("https://www.google.com/", "?query=string", "https://www.google.com/?query=string"),
+		("https://www.google.com/", "#fragment", "https://www.google.com/#fragment"),
+		("http://www.google.com/", "http://user:pass@www.google.com/", "http://user:pass@www.google.com/"),
+		("http://www.google.com/", "http://user@www.google.com/", "http://user@www.google.com/"),
+		("http://www.google.com/", "http://:pass@www.google.com/", "http://:pass@www.google.com/"),
+	])
+def test_assert_same_urljoin_result(base, href, expected):
+	urllib = urljoin(base, href)
+	uri = URI(base).resolve(href)
+	
+	assert urllib == uri == expected
