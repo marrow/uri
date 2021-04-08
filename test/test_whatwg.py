@@ -296,6 +296,43 @@ class TestWhatwgURL:
 		assert url.origin == URI("https://www.google.com").origin
 
 
+@pytest.mark.parametrize('url', [
+		"https://www.google.com/",
+		"http://user:pass@www.example.com/",
+		"http://:pass@www.example.com/",
+		"http://user@www.example.com/",
+		"http://www.example.com:432/",
+		"http://www.example.com/?a=1;B=c",
+		"http://www.example.com/#Fragment",
+		"http://username:password@www.example.com:1234/?query=string#fragment",
+	])
+@pytest.mark.parametrize('attr', [
+		'netloc',
+		'hostname',
+		'port',
+		'path',
+		'query',
+		'fragment',
+		'username',
+		'password'
+	])
+def test_assert_same_urlparse_result(url, attr):
+	urllib = urlparse(url)
+	uri = URI(url)
+	
+	urllib_value = getattr(urllib, attr)
+	uri_value = getattr(uri, attr)
+	
+	if urllib_value == "" and uri_value is None:
+		pytest.xfail("URI uses None where urllib uses empty strings")
+	
+	if isinstance(uri_value, Path):
+		assert urllib_value == str(uri_value)  # First, ensure the string versions are equal...
+		
+		pytest.xfail("URI uses rich Path objects where urllib uses strings, which compared OK")
+	
+	assert urllib_value == uri_value
+
 @pytest.mark.parametrize(('base', 'href', 'expected'), [
 		("http://www.google.com/", "", "http://www.google.com/"),
 		("http://www.google.com/", "/", "http://www.google.com/"),
