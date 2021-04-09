@@ -40,6 +40,19 @@ URI_COMPONENTS = [
 				qs = 'param=val',
 				fragment = 'fragment',
 			)),
+		# From test_normalize_host.py
+		('http://xn--e1afmkfd.xn--80akhbyknj4f/', dict(  # ** for identity test to pass, must provide encoded form
+				scheme = 'http',
+				authority = 'xn--e1afmkfd.xn--80akhbyknj4f',
+				heirarchical = 'xn--e1afmkfd.xn--80akhbyknj4f/',
+				password = None,
+				host = 'пример.испытание',
+				port = None,
+				path = Path('/'),
+				relative = False,
+				summary = 'xn--e1afmkfd.xn--80akhbyknj4f/',  # XXX: Consider using the readable Unicode form for this?
+				base = 'http://xn--e1afmkfd.xn--80akhbyknj4f/',
+			)),
 	]
 
 for _uri, _parts in URI_COMPONENTS:
