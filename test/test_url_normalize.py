@@ -61,6 +61,14 @@ for _uri, _parts in URI_COMPONENTS:
 	if 'host' in _parts: _parts['hostname'] = _parts['host']
 
 
+def test_normalize_scheme():
+	instance = URI('http://site.com/')
+	assert instance.scheme == 'http'
+	
+	instance = URI('HTTP://site.com/')
+	assert instance.scheme == 'http'
+
+
 def test_normalize_host():
 	instance = URI('http://SITE.COM/')
 	assert instance.host == 'site.com'
