@@ -32,4 +32,6 @@ class HostPart(ProxyPart):
 		elif value.startswith('xn--'):
 			value = value.encode('ascii').decode('idna')
 		
+		value = value.lower().rstrip('.')
+		
 		super().__set__(obj, value)

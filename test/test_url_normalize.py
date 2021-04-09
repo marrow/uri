@@ -61,6 +61,14 @@ for _uri, _parts in URI_COMPONENTS:
 	if 'host' in _parts: _parts['hostname'] = _parts['host']
 
 
+def test_normalize_host():
+	instance = URI('http://SITE.COM/')
+	assert instance.host == 'site.com'
+	
+	instance = URI('http://site.com./')
+	assert instance.host == 'site.com'
+
+
 @pytest.mark.parametrize('string,attributes', URI_COMPONENTS)
 class TestURLNormalize:
 	def test_truthiness(self, string, attributes):
@@ -78,14 +86,6 @@ class TestURLNormalize:
 	def test_identity_comparison(self, string, attributes):
 		instance = URI(string)
 		assert instance == attributes['uri']
-	
-	def test_inverse_bad_comparison(self, string, attributes):
-		instance = URI(string)
-		assert instance != "fnord"
-	
-	def test_length(self, string, attributes):
-		instance = URI(string)
-		assert len(instance) == len(string)
 	
 	@pytest.mark.parametrize('component', URI.__all_parts__ | {'base', 'qs', 'summary', 'relative'})
 	def test_component(self, string, attributes, component):
