@@ -306,16 +306,7 @@ class TestWhatwgURL:
 		"http://www.example.com/#Fragment",
 		"http://username:password@www.example.com:1234/?query=string#fragment",
 	])
-@pytest.mark.parametrize('attr', [
-		'netloc',
-		'hostname',
-		'port',
-		'path',
-		'query',
-		'fragment',
-		'username',
-		'password'
-	])
+@pytest.mark.parametrize('attr', ['netloc', 'hostname', 'port', 'path', 'query', 'fragment', 'username', 'password'])
 def test_assert_same_urlparse_result(url, attr):
 	urllib = urlparse(url)
 	uri = URI(url)
@@ -326,12 +317,12 @@ def test_assert_same_urlparse_result(url, attr):
 	if urllib_value == "" and uri_value is None:
 		pytest.xfail("URI uses None where urllib uses empty strings")
 	
-	if isinstance(uri_value, Path):
+	elif isinstance(uri_value, Path):
 		assert urllib_value == str(uri_value)  # First, ensure the string versions are equal...
-		
 		pytest.xfail("URI uses rich Path objects where urllib uses strings, which compared OK")
 	
 	assert urllib_value == uri_value
+
 
 @pytest.mark.parametrize(('base', 'href', 'expected'), [
 		("http://www.google.com/", "", "http://www.google.com/"),
@@ -352,6 +343,7 @@ def test_assert_same_urlparse_result(url, attr):
 	])
 def test_assert_same_urljoin_result(base, href, expected):
 	urllib = urljoin(base, href)
-	uri = URI(base).resolve(href)
+	uri_resolve = URI(base).resolve(href)
+	uri_division = str(URI(base) / href)
 	
-	assert urllib == uri == expected
+	assert urllib == uri_resolve == uri_division == expected
