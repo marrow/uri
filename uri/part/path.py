@@ -29,8 +29,8 @@ class PathPart(ProxyPart):
 		
 		super(PathPart, self).__set__(obj, value)
 	
-	def render(self, obj, value):
-		result = super(PathPart, self).render(obj, value)
+	def render(self, obj, value, raw=False):
+		result = super(PathPart, self).render(obj, value, raw)
 		
 		if result is None or result == '.':
 			if not obj._host:

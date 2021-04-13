@@ -50,7 +50,7 @@ URI_COMPONENTS = [
 				port = None,
 				path = Path('/'),
 				relative = False,
-				summary = 'xn--e1afmkfd.xn--80akhbyknj4f/',  # XXX: Consider using the readable Unicode form for this?
+				summary = 'пример.испытание/',
 				base = 'http://xn--e1afmkfd.xn--80akhbyknj4f/',
 			)),
 	]

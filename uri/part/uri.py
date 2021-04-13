@@ -4,11 +4,12 @@ from urllib.parse import urlsplit
 
 
 class URIPart:
-	__slots__ = ('parts', 'writeable')
+	__slots__ = ('parts', 'writeable', 'raw')
 	
-	def __init__(self, parts, writeable=True):
+	def __init__(self, parts, writeable=True, raw=False):
 		self.parts = parts
 		self.writeable = writeable
+		self.raw = raw
 	
 	def __get__(self, obj, cls=None):
 		components = []
@@ -17,7 +18,7 @@ class URIPart:
 			value = getattr(obj, part)
 			part = getattr(cls, part)
 			
-			components.append(part.render(obj, value))
+			components.append(part.render(obj, value, self.raw))
 		
 		return "".join(components)
 	

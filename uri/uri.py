@@ -58,7 +58,7 @@ class URI:
 	safe_uri = URIPart(__safe_parts__, False)  # URI retrieval without password component, useful for logging.
 	base = BasePart()
 	origin = URIPart(('scheme', 'host', 'port'), False)
-	summary = URIPart(('host', 'path'), False)
+	summary = URIPart(('host', 'path'), False, True)
 	resource = URIPart(('path', 'query', 'fragment'), False)
 	defrag = URIPart(tuple([i for i in __all_parts__ if i != 'fragment']))  # Fragments are not sent to web servers.
 	

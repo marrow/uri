@@ -8,11 +8,12 @@ class HostPart(ProxyPart):
 	
 	attribute = '_host'
 	
-	def render(self, obj, value):
-		result = super(HostPart, self).render(obj, value)
+	def render(self, obj, value, raw=False):
+		result = super(HostPart, self).render(obj, value, raw)
 		
 		try:
-			result.encode('ascii')
+			if not raw:
+				result.encode('ascii')
 		except UnicodeEncodeError:
 			result = result.encode('idna').decode('ascii')
 		

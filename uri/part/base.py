@@ -14,7 +14,7 @@ class Part:
 	suffix: str = ''
 	empty: str = ''
 	
-	def render(self, obj, value:Optional[Stringy]) -> str:
+	def render(self, obj, value:Optional[Stringy], raw:bool=False) -> str:
 		if not value: return self.empty
 		return self.prefix + str(value) + self.suffix
 	

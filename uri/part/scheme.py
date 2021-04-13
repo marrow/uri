@@ -27,8 +27,8 @@ class SchemePart(Part):
 		
 		return result
 	
-	def render(self, obj, value):
-		result = super(SchemePart, self).render(obj, value)
+	def render(self, obj, value, raw=False):
+		result = super(SchemePart, self).render(obj, value, raw)
 		
 		if obj._scheme and obj.scheme.slashed:
 			result = result + '//'
