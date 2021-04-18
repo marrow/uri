@@ -1,7 +1,7 @@
 PROJECT = uri
 USE = development
 
-.PHONY: all develop clean veryclean test release
+.PHONY: all develop clean veryclean test watch release
 
 all: clean develop test
 
@@ -18,12 +18,16 @@ veryclean: clean
 
 test: develop
 	@clear
-	@pytest
+	@pytest --no-header --no-summary
+
+watch: develop
+	find . -iname \*.py | entr -c pytest --no-header --no-summary
 
 release:
-	./setup.py sdist bdist_wheel upload ${RELEASE_OPTIONS}
-	@echo -e "\nView online at: https://pypi.python.org/pypi/${PROJECT} or https://pypi.org/project/${PROJECT}/"
-	@echo -e "Remember to make a release announcement and upload contents of .packaging/release/ folder as a Release on GitHub.\n"
+	@echo "Needs to be reimplemented."
+	#./setup.py sdist bdist_wheel upload ${RELEASE_OPTIONS}
+	#@echo -e "\nView online at: https://pypi.python.org/pypi/${PROJECT} or https://pypi.org/project/${PROJECT}/"
+	#@echo -e "Remember to make a release announcement and upload contents of .packaging/release/ folder as a Release on GitHub.\n"
 
 ${PROJECT}.egg-info/PKG-INFO: setup.py setup.cfg uri/release.py
 	@mkdir -p ${VIRTUAL_ENV}/lib/pip-cache
