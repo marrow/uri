@@ -24,7 +24,8 @@ tests_require = [
 		'pytest-cov',  # coverage reporting
 		'pytest-flakes',  # syntax validation
 		'pytest-isort',  # import ordering
-		'webob',  # Request WSGI environment mocking.
+		'webob',  # request WSGI environment mocking
+		'markupsafe',  # bless use with a common HTML entity encoder and its encoding protocol
 	]
 
 trove_map = {
