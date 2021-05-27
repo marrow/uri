@@ -28,12 +28,13 @@ robust as `Vagrant <http://www.vagrantup.com>`__.
 If you add ``uri`` to the ``install_requires`` argument of the call to ``setup()`` in your application's
 ``setup.py`` file, ``uri`` will be automatically installed and made available when your own application or
 library is installed.  We recommend using "less than" version numbers to ensure there are no unintentional
-side-effects when updating.  Use ``uri<2.1`` to get all bugfixes for the current release, and
-``uri<3.0`` to get bugfixes and feature updates while ensuring that large breaking changes are not installed.
+side-effects when updating.  Use ``uri<2.1`` to get all bug fixes for the current release, and
+``uri<3.0`` to get bug fixes and feature updates while ensuring that large breaking changes are not installed.
 
-While uri does not have any hard dependencies on any other package, it is **strongly** recommended that applications
-using uri in web-based applications also install the ``markupsafe`` package to provide more efficient string escaping and
-some additional functionality.
+While ``uri`` does not have any hard dependencies on any other package, it is **strongly** recommended that
+applications using ``uri`` in web-based applications also install the
+`MarkupSafe <https://pypi.org/project/MarkupSafe/>`__ package to provide more efficient string escaping and some
+additional functionality.
 
 
 Development Version
@@ -45,9 +46,9 @@ Development takes place on `GitHub <https://github.com/>`__ in the `uri
 <https://github.com/marrow/uri/>`__ project.  Issue tracking, documentation, downloads, and test automation
 are provided there.
 
-Installing the current development version requires `Git <http://git-scm.com/>`__, a distributed source code management
-system.  If you have Git you can run the following to download and *link* the development version into your Python
-runtime::
+Installing the current development version requires `Git <https://git-scm.com/>`__, a distributed source code
+management system.  If you have Git you can run the following to download and *link* the development version into your
+Python runtime::
 
     git clone https://github.com/marrow/uri.git
     (cd uri; python setup.py develop)
@@ -75,7 +76,7 @@ defined by `RFC 3986 <http://pretty-rfc.herokuapp.com/RFC3986>`_::
 
 For details on these components, `please refer to Wikipedia
 <https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Syntax>`__. Each of these components is represented by an
-appropraite rich datatype:
+appropriate rich datatype:
 
 * The ``scheme`` of a URI represents an extensible API of string-like plugins.
 * Any IPv6 ``host`` is automatically wrapped and unwrapped in square braces.
@@ -87,7 +88,7 @@ exposing a ``__link__`` method or attribute::
 
     home = URI("https://github.com/marrow/")
 
-The *scalar* attributes are combined into several *compound* groups for convienence:
+The *scalar* attributes are combined into several *compound* groups for convenience:
 
 * The ``credentials`` are a colon (``:``) separated combination of: ``user`` + ``password`` — also accessible via the
   shorter ``auth`` or the longer ``authentication`` attributes. May be assigned using array/mapping notation.
@@ -102,11 +103,11 @@ interoperability with ``pathlib.Path`` or ``urlsplit`` objects:
 * ``hostname`` is the long form of ``host``.
 * ``authentication`` is the long form of ``auth``.
 
-In addition, several string views are provided for convienence, but ultimately all just call `str()` against the
+In addition, several string views are provided for convenience, but ultimately all just call `str()` against the
 instance or one of the compound groups described above:
 
 * ``uri`` represents the entire URI as a string.
-* ``safe_uri`` represents the enture URI, sans any password that may be present.
+* ``safe_uri`` represents the entire URI, sans any password that may be present.
 * ``base`` is the combination of ``scheme`` and the ``heirarchical`` part.
 * ``summary`` is a useful shortcut for web presentation containing only the ``host`` and ``port`` of the URI.
 * ``qs`` is just the query string, as a plain string instead of QSO instance.
