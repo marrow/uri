@@ -2,7 +2,12 @@
 
 from __future__ import unicode_literals
 
-from collections import ItemsView, KeysView, MutableMapping, MutableSequence, ValuesView, deque, namedtuple
+from collections import deque, namedtuple
+
+try:
+	from typing import ItemsView, KeysView, MutableMapping, MutableSequence, ValuesView
+except ImportError:
+	from collections import ItemsView, KeysView, MutableMapping, MutableSequence, ValuesView
 
 from .compat import SENTINEL, py2, quote_plus, str, unquote_plus
 
