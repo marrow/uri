@@ -20,6 +20,9 @@ test: develop
 	@clear
 	@pytest
 
+watch: develop
+	find . -iname \*.py | entr -c pytest --no-header --ff --maxfail=1
+
 release:
 	./setup.py sdist bdist_wheel upload ${RELEASE_OPTIONS}
 	@echo -e "\nView online at: https://pypi.python.org/pypi/${PROJECT} or https://pypi.org/project/${PROJECT}/"
