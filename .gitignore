@@ -23,6 +23,7 @@ third-party
 # Unit Test / Coverage Reports
 .pytest_cache
 .cache
+.mypy_cache
 .cagoule.db
 .coverage
 .tox
