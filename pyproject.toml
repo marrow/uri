@@ -1,0 +1,77 @@
+[build-system]
+requires = ["setuptools>=61.2", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uri"
+authors = [
+		{name="Alice Bevan-McGregor", email="alice@gothcandy.com"},
+	]
+description = "A type to represent, query, and manipulate a Uniform Resource Identifier."
+readme = "README.rst"
+requires-python = ">=3.8"
+keywords = ['type', 'URI', 'URL', 'rfc', 'rfc']
+license = {text='MIT'}
+classifiers = [
+		"Development Status :: 5 - Production/Stable",
+		"Intended Audience :: Developers",
+		"License :: OSI Approved :: MIT License",
+		"Operating System :: OS Independent",
+		"Programming Language :: Python",
+		"Programming Language :: Python :: 3",
+		"Programming Language :: Python :: 3.6",
+		"Programming Language :: Python :: 3.7",
+		"Programming Language :: Python :: 3.8",
+		"Programming Language :: Python :: 3.9",
+		"Programming Language :: Python :: Implementation :: CPython",
+		"Programming Language :: Python :: Implementation :: PyPy",
+		"Topic :: Software Development :: Libraries :: Python Modules",
+		"Topic :: Utilities"
+	]
+dependencies = []  # URI has no direct runtime dependencies.
+dynamic = ["version"]
+
+[project.optional-dependencies]
+http = ['requests']  # Support for the http:// and https:// protocols.
+test = [
+		'pytest',  # test collector and extensible runner
+		'pytest-cov',  # coverage reporting
+		'pytest-flakes',  # syntax validation
+		'pytest-isort',  # import ordering
+		'webob',  # Request WSGI environment mocking.
+	]
+development = [  # Development-time dependencies.
+		'pytest',  # test collector and extensible runner
+		'pytest-cov',  # coverage reporting
+		'pytest-flakes',  # syntax validation
+		'pytest-isort',  # import ordering
+		'webob',  # Request WSGI environment mocking.
+		'pre-commit',  # Commit hooks for code quality.
+		'mypy',  # Type hinting analysis.
+		'rope',  # Project symbols collection.
+		'bandit',  # Automated security analysis.
+		'ptipython',  # Enhanced interactive REPL shell.
+		'e',  # python -me
+	]
+
+[project.entry-points."uri.scheme"]
+# https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
+# https://www.w3.org/wiki/UriSchemes
+file = "uri.scheme:URLScheme"
+ftp = "uri.scheme:URLScheme"
+http = "uri.scheme:URLScheme"
+https = "uri.scheme:URLScheme"
+irc = "uri.scheme:URLScheme"
+ldap = "uri.scheme:URLScheme"
+telnet = "uri.scheme:URLScheme"
+sftp = "uri.scheme:URLScheme"
+# Care of https://github.com/APSL/uri/commit/709b4b73daae7b8651b92fd4fa63af41c4db2986
+mysql = "uri.scheme:URLScheme"
+redis = "uri.scheme:URLScheme"
+# https://docs.mongodb.com/manual/reference/connection-string
+mongodb = "uri.scheme:URLScheme"
+
+
+[tool.setuptools_scm]
+
+
