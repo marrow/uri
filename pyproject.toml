@@ -19,10 +19,10 @@ classifiers = [
 		"Operating System :: OS Independent",
 		"Programming Language :: Python",
 		"Programming Language :: Python :: 3",
-		"Programming Language :: Python :: 3.6",
-		"Programming Language :: Python :: 3.7",
 		"Programming Language :: Python :: 3.8",
 		"Programming Language :: Python :: 3.9",
+		"Programming Language :: Python :: 3.10",
+		"Programming Language :: Python :: 3.11",
 		"Programming Language :: Python :: Implementation :: CPython",
 		"Programming Language :: Python :: Implementation :: PyPy",
 		"Topic :: Software Development :: Libraries :: Python Modules",
@@ -35,43 +35,98 @@ dynamic = ["version"]
 http = ['requests']  # Support for the http:// and https:// protocols.
 test = [
 		'pytest',  # test collector and extensible runner
-		'pytest-cov',  # coverage reporting
+		'pytest-cov[toml]',  # coverage reporting
 		'pytest-flakes',  # syntax validation
 		'pytest-isort',  # import ordering
 		'webob',  # Request WSGI environment mocking.
+		'requests',  # Support for the http:// and https:// protocols.
 	]
 development = [  # Development-time dependencies.
 		'pytest',  # test collector and extensible runner
-		'pytest-cov',  # coverage reporting
+		'pytest-cov[toml]',  # coverage reporting
 		'pytest-flakes',  # syntax validation
 		'pytest-isort',  # import ordering
 		'webob',  # Request WSGI environment mocking.
+		'requests',  # Support for the http:// and https:// protocols.
 		'pre-commit',  # Commit hooks for code quality.
 		'mypy',  # Type hinting analysis.
 		'rope',  # Project symbols collection.
 		'bandit',  # Automated security analysis.
 		'ptipython',  # Enhanced interactive REPL shell.
-		'e',  # python -me
+		'e',  # python3 -me
 	]
 
 [project.entry-points."uri.scheme"]
 # https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
 # https://www.w3.org/wiki/UriSchemes
-file = "uri.scheme:URLScheme"
-ftp = "uri.scheme:URLScheme"
-http = "uri.scheme:URLScheme"
-https = "uri.scheme:URLScheme"
-irc = "uri.scheme:URLScheme"
-ldap = "uri.scheme:URLScheme"
-telnet = "uri.scheme:URLScheme"
-sftp = "uri.scheme:URLScheme"
+file = 'uri.scheme:URLScheme'
+ftp = 'uri.scheme:URLScheme'
+http = 'uri.scheme:URLScheme'
+https = 'uri.scheme:URLScheme'
+irc = 'uri.scheme:URLScheme'
+ldap = 'uri.scheme:URLScheme'
+telnet = 'uri.scheme:URLScheme'
+sftp = 'uri.scheme:URLScheme'
 # Care of https://github.com/APSL/uri/commit/709b4b73daae7b8651b92fd4fa63af41c4db2986
-mysql = "uri.scheme:URLScheme"
-redis = "uri.scheme:URLScheme"
-# https://docs.mongodb.com/manual/reference/connection-string
-mongodb = "uri.scheme:URLScheme"
+mysql = 'uri.scheme:URLScheme'
+redis = 'uri.scheme:URLScheme'
+postgres = 'uri.scheme:URLScheme'
+postgresql = 'uri.scheme:URLScheme'
+mongodb = 'uri.scheme:URLScheme'  # https://docs.mongodb.com/manual/reference/connection-string
 
 
 [tool.setuptools_scm]
 
+
+[tool.pytest.ini_options]
+addopts = '-l -r fEsxw --cov uri --no-cov-on-fail --cov-report term-missing --cov-report xml --flakes --isort --durations=5 --color=yes test'
+#addopts = [
+#		'-l', '-r', 'fEsxw',
+#		'--flakes',  # PyFlakes formatting.
+#		'--isort',  # Ensure we have properly sorted imports.
+#		'--cov-report term-missing',  # Print report to terminal.
+#		'--cov-report xml',  # But also write to X-Unit XML file.
+#		'--no-cov-on-fail',  # Don't bother reporting if we failed.
+#		'--cov uri',  # Specifically examine coverage for our package.
+#		'--durations=5',  # Also track the slowest tests to execute.
+#		'--color=yes',  # Pretty is nice.
+#		'test'
+#	]
+
+flakes-ignore = [
+		'test/*.py UnusedImport',
+		'test/*/*.py UnusedImport ImportStarUsed',
+	]
+
+filterwarnings = [
+		'default',
+		'ignore::DeprecationWarning:isort.*',
+	]
+
+
+[tool.coverage.report]
+exclude_lines = [
+		# Re-enable the standard pragma, since we override it.
+		'pragma: no( |-)?cov(er)?',
+		
+		# Don't complain if non-runnable code isn't run:
+		'if 0:',
+		'if False:',
+		'if __name__ == .__main__.:',
+	]
+
+
+[tool.isort]
+line_length = 120
+multi_line_output = 3
+balanced_wrapping = false
+include_trailing_comma = true
+indent = "		"
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+verbose = true
+known_first_party = ["uri"]
+
+
+[tool.black]
+line_length = 120
 
