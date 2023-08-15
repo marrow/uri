@@ -1,2 +1,2 @@
 [bandit]
-exclude: /env,.eggs,.packaging,.cache
+exclude: .*cache

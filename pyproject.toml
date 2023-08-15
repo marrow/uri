@@ -54,6 +54,10 @@ development = [  # Development-time dependencies.
 		'bandit',  # Automated security analysis.
 		'ptipython',  # Enhanced interactive REPL shell.
 		'e',  # python3 -me
+		'build',  # Python packaging build tool.
+		'wheel',  # "Wheel" package format support.
+		'cibuildwheel',  # Build automation.
+		'twine',  # Python package release tool.
 	]
 
 [project.entry-points."uri.scheme"]
@@ -129,4 +133,11 @@ known_first_party = ["uri"]
 
 [tool.black]
 line_length = 120
+
+
+[tool.mypy]
+follow_imports = silent
+strict_optional = True
+warn_no_return = False
+check_untyped_defs = True
 
