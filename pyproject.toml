@@ -31,30 +31,35 @@ classifiers = [
 dependencies = []  # URI has no direct runtime dependencies.
 dynamic = ["version"]
 
+[project.urls]
+Repository = "https://github.com/marrow/uri.git"
+
 [project.optional-dependencies]
 http = ['requests']  # Support for the http:// and https:// protocols.
 test = [
-		'pytest',  # test collector and extensible runner
-		'pytest-cov[toml]',  # coverage reporting
-		'pytest-flakes',  # syntax validation
-		'pytest-isort',  # import ordering
+		'pytest',  # Test collector and extensible runner.
+		'pytest-cov[toml]',  # Coverage reporting.
+		'pytest-flakes',  # Syntax validation.
+		'pytest-isort',  # Import ordering.
+		'pytest-mypy',  # Static type validation.
 		'webob',  # Request WSGI environment mocking.
 		'requests',  # Support for the http:// and https:// protocols.
 	]
 development = [  # Development-time dependencies.
-		'pytest',  # test collector and extensible runner
-		'pytest-cov[toml]',  # coverage reporting
-		'pytest-flakes',  # syntax validation
-		'pytest-isort',  # import ordering
+		'pytest',  # Test collector and extensible runner.
+		'pytest-cov[toml]',  # Coverage reporting.
+		'pytest-flakes',  # Syntax validation.
+		'pytest-isort',  # Import ordering.
 		'webob',  # Request WSGI environment mocking.
 		'requests',  # Support for the http:// and https:// protocols.
 		'pre-commit',  # Commit hooks for code quality.
 		'mypy',  # Type hinting analysis.
 		'rope',  # Project symbols collection.
 		'bandit',  # Automated security analysis.
+		'black',  # Syntax linting.
 		'ptipython',  # Enhanced interactive REPL shell.
-		'e',  # python3 -me
-		'build',  # Python packaging build tool.
+		'e',  # Try: python3 -me
+		'build[virtualenv]',  # Python packaging build tool.
 		'wheel',  # "Wheel" package format support.
 		'cibuildwheel',  # Build automation.
 		'twine',  # Python package release tool.
@@ -83,7 +88,7 @@ mongodb = 'uri.scheme:URLScheme'  # https://docs.mongodb.com/manual/reference/co
 
 
 [tool.pytest.ini_options]
-addopts = '-l -r fEsxw --cov uri --no-cov-on-fail --cov-report term-missing --cov-report xml --flakes --isort --durations=5 --color=yes test'
+addopts = '-l -r fEsxw --cov uri --mypy --no-cov-on-fail --cov-report term-missing --cov-report xml --flakes --isort --durations=5 --color=yes test'
 #addopts = [
 #		'-l', '-r', 'fEsxw',
 #		'--flakes',  # PyFlakes formatting.
@@ -136,8 +141,8 @@ line_length = 120
 
 
 [tool.mypy]
-follow_imports = silent
-strict_optional = True
-warn_no_return = False
-check_untyped_defs = True
+#follow_imports = silent
+#strict_optional = True
+#warn_no_return = False
+#check_untyped_defs = True
 
