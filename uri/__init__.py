@@ -2,11 +2,11 @@
 
 from pathlib import PurePosixPath as Path
 
-from .release import version as __version__
-
 from .bucket import Bucket
 from .qso import QSO
 from .uri import URI
+
+__version__ = ''
 
 __all__ = [
 		'Path',
