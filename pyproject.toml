@@ -42,6 +42,7 @@ test = [
 		'pytest-flakes',  # Syntax validation.
 		'pytest-isort',  # Import ordering.
 		'pytest-mypy',  # Static type validation.
+		'pytest-black',  # Syntax linting.
 		'webob',  # Request WSGI environment mocking.
 		'requests',  # Support for the http:// and https:// protocols.
 	]
@@ -50,6 +51,8 @@ development = [  # Development-time dependencies.
 		'pytest-cov[toml]',  # Coverage reporting.
 		'pytest-flakes',  # Syntax validation.
 		'pytest-isort',  # Import ordering.
+		'pytest-mypy',  # Static type validation.
+		'pytest-black',  # Syntax linting.
 		'webob',  # Request WSGI environment mocking.
 		'requests',  # Support for the http:// and https:// protocols.
 		'pre-commit',  # Commit hooks for code quality.
@@ -89,18 +92,6 @@ mongodb = 'uri.scheme:URLScheme'  # https://docs.mongodb.com/manual/reference/co
 
 [tool.pytest.ini_options]
 addopts = '-l -r fEsxw --cov uri --mypy --no-cov-on-fail --cov-report term-missing --cov-report xml --flakes --isort --durations=5 --color=yes test'
-#addopts = [
-#		'-l', '-r', 'fEsxw',
-#		'--flakes',  # PyFlakes formatting.
-#		'--isort',  # Ensure we have properly sorted imports.
-#		'--cov-report term-missing',  # Print report to terminal.
-#		'--cov-report xml',  # But also write to X-Unit XML file.
-#		'--no-cov-on-fail',  # Don't bother reporting if we failed.
-#		'--cov uri',  # Specifically examine coverage for our package.
-#		'--durations=5',  # Also track the slowest tests to execute.
-#		'--color=yes',  # Pretty is nice.
-#		'test'
-#	]
 
 flakes-ignore = [
 		'test/*.py UnusedImport',
