@@ -28,6 +28,7 @@ release:
 	@echo -e "\nView online at: https://pypi.python.org/pypi/${PROJECT} or https://pypi.org/project/${PROJECT}/"
 	@echo -e "Remember to make a release announcement and upload contents of .packaging/release/ folder as a Release on GitHub.\n"
 
-${PROJECT}.egg-info/PKG-INFO: setup.py setup.cfg uri/release.py
+${PROJECT}.egg-info/PKG-INFO: pyproject.toml
 	@mkdir -p ${VIRTUAL_ENV}/lib/pip-cache
 	pip install --cache-dir "${VIRTUAL_ENV}/lib/pip-cache" -Ue ".[${USE}]"
+

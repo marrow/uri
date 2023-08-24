@@ -50,6 +50,7 @@ development = [  # Development-time dependencies.
 		'pytest-cov[toml]',  # Coverage reporting.
 		'pytest-flakes',  # Syntax validation.
 		'pytest-isort',  # Import ordering.
+		'pytest-mypy',  # Static type validation.
 		'webob',  # Request WSGI environment mocking.
 		'requests',  # Support for the http:// and https:// protocols.
 		'pre-commit',  # Commit hooks for code quality.
@@ -88,7 +89,8 @@ mongodb = 'uri.scheme:URLScheme'  # https://docs.mongodb.com/manual/reference/co
 
 
 [tool.pytest.ini_options]
-addopts = '-l -r fEsxw --cov uri --mypy --no-cov-on-fail --cov-report term-missing --cov-report xml --flakes --isort --durations=5 --color=yes test'
+addopts = '-l -r fEsxw --cov uri --no-cov-on-fail --cov-report term-missing --cov-report xml --flakes --isort --durations=5 --color=yes test'
+#addopts = '-l -r fEsxw --cov uri --mypy --no-cov-on-fail --cov-report term-missing --cov-report xml --flakes --isort --durations=5 --color=yes test'
 #addopts = [
 #		'-l', '-r', 'fEsxw',
 #		'--flakes',  # PyFlakes formatting.

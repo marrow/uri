@@ -54,7 +54,7 @@ class URI:
 	
 	# Additional Compound Interfaces
 	uri = URIPart(__parts__)  # Whole-URI retrieval or storage as string.
-	safe_uri = URIPart(__safe_parts__, False)  # URI retrieval without password component, useful for logging.
+	safe = safe_uri = URIPart(__safe_parts__, False)  # URI retrieval without password component, useful for logging.
 	base = BasePart()
 	summary = URIPart(('host', 'path'), False)
 	resource = URIPart(('path', 'query', 'fragment'), False)
