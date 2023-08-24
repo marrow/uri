@@ -58,5 +58,6 @@ class Bucket:
 	
 	def __str__(self):
 		# Certain symbols are explicitly allowed, ref: http://pretty-rfc.herokuapp.com/RFC3986#query
-		iterator = (quote_plus(i.encode('utf8')).replace('%3F', '?').replace('%2F', '/') for i in self) if self.valid else self
+		iterator = (quote_plus(i.encode('utf8')).replace(b'%3F', b'?').replace(b'%2F', b'/') for i in self) if self.valid else self
 		return self.sep.join(iterator)
+
