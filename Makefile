@@ -1,7 +1,7 @@
 PROJECT = uri
 USE = development
 
-.PHONY: all develop clean veryclean test release
+.PHONY: all develop clean veryclean test watch release
 
 all: clean develop test
 
@@ -18,7 +18,7 @@ veryclean: clean
 
 test: develop
 	@clear
-	@pytest
+	@pytest --no-header --no-summary
 
 watch: develop
 	@clear
