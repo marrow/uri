@@ -38,41 +38,43 @@ Repository = "https://github.com/marrow/uri.git"
 http = ['requests']  # Support for the http:// and https:// protocols.
 test = [
 		'pytest',  # Test collector and extensible runner.
+		'pytest-black',  # Syntax linting.
 		'pytest-cov[toml]',  # Coverage reporting.
 		'pytest-flakes',  # Syntax validation.
 		'pytest-isort',  # Import ordering.
 		'pytest-mypy',  # Static type validation.
-		'pytest-black',  # Syntax linting.
+		'requests',  # Support for the http:// and https:// protocols.
 		'types-setuptools',  # Typing stubs.
 		'webob',  # Request WSGI environment mocking.
-		'requests',  # Support for the http:// and https:// protocols.
 	]
 development = [  # Development-time dependencies.
+		'bandit',  # Automated security analysis.
+		'black',  # Syntax linting.
+		'build[virtualenv]',  # Python packaging build tool.
+		'cibuildwheel',  # Build automation.
+		'e',  # Try: python3 -me
+		'mypy',  # Type hinting analysis.
+		'pre-commit',  # Commit hooks for code quality.
+		'ptipython',  # Enhanced interactive REPL shell.
 		'pytest',  # Test collector and extensible runner.
+		'pytest-black',  # Syntax linting.
 		'pytest-cov[toml]',  # Coverage reporting.
 		'pytest-flakes',  # Syntax validation.
 		'pytest-isort',  # Import ordering.
 		'pytest-mypy',  # Static type validation.
-		'pytest-black',  # Syntax linting.
+		'requests',  # Support for the http:// and https:// protocols.
+		'rope',  # Project symbols collection.
+		'twine',  # Python package release tool.
 		'types-setuptools',  # Typing stubs.
 		'webob',  # Request WSGI environment mocking.
-		'requests',  # Support for the http:// and https:// protocols.
-		'pre-commit',  # Commit hooks for code quality.
-		'mypy',  # Type hinting analysis.
-		'rope',  # Project symbols collection.
-		'bandit',  # Automated security analysis.
-		'black',  # Syntax linting.
-		'ptipython',  # Enhanced interactive REPL shell.
-		'e',  # Try: python3 -me
-		'build[virtualenv]',  # Python packaging build tool.
 		'wheel',  # "Wheel" package format support.
-		'cibuildwheel',  # Build automation.
-		'twine',  # Python package release tool.
 	]
 
 [project.entry-points."uri.scheme"]
 # https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
 # https://www.w3.org/wiki/UriSchemes
+# https://github.com/APSL/uri/commit/709b4b73daae7b8651b92fd4fa63af41c4db2986
+# https://docs.mongodb.com/manual/reference/connection-string
 file = 'uri.scheme:URLScheme'
 ftp = 'uri.scheme:URLScheme'
 http = 'uri.scheme:URLScheme'
@@ -81,12 +83,11 @@ irc = 'uri.scheme:URLScheme'
 ldap = 'uri.scheme:URLScheme'
 telnet = 'uri.scheme:URLScheme'
 sftp = 'uri.scheme:URLScheme'
-# Care of https://github.com/APSL/uri/commit/709b4b73daae7b8651b92fd4fa63af41c4db2986
 mysql = 'uri.scheme:URLScheme'
 redis = 'uri.scheme:URLScheme'
 postgres = 'uri.scheme:URLScheme'
 postgresql = 'uri.scheme:URLScheme'
-mongodb = 'uri.scheme:URLScheme'  # https://docs.mongodb.com/manual/reference/connection-string
+mongodb = 'uri.scheme:URLScheme'
 
 
 [tool.setuptools_scm]

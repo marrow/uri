@@ -3,7 +3,7 @@ from re import compile as r
 
 
 class Part:
-	"""Descriptor protocol objects for combantorial string parts with validation."""
+	"""Descriptor protocol objects for combinatorial string parts with validation."""
 	
 	__slots__ = ()
 	
