@@ -1,33 +1,32 @@
-from pkg_resources import iter_entry_points
-from re import compile as r
+from importlib.metadata import entry_points
+from typing import ClassVar, Dict, Optional
+from re import compile as r, Pattern
 
 from .base import Part
 from ..scheme import Scheme
 
 
 class SchemePart(Part):
-	__slots__ = ()
+	__slots__: tuple = ()  # Do not populate a __dict__ dictionary attribute; only allocate space for these.
 	
-	valid = r(r'[a-z][a-z0-9+.+-]*')
-	suffix = ':'
-	registry = {'': None}
-	empty = ''
+	registry: ClassVar[Dict[str, Optional[Scheme]]] = {'': None}
+	suffix: str = ':'  # Protocol suffix when utilized as part of a complete URI; e.g. ':' or '://'.
+	valid: Pattern = r(r'[a-z][a-z0-9+.+-]*')  # Protocol/scheme name validated when run unoptimized.
 	
-	def load(self, plugin):
-		if plugin in self.registry:
-			return self.registry[plugin]
+	def load(self, plugin:str) -> Scheme:
+		assert self.valid.match(plugin), f"Invalid plugin name: {plugin!r}"
+		if plugin in self.registry: return self.registry[plugin]  # Short circuit if we've seen this before.
 		
-		try:
-			result, = iter_entry_points('uri.scheme', plugin)
-			result = result.load()(plugin)
-		except:
-			result = Scheme(plugin)
+		# If we haven't, attempt to load the explicit Scheme subclass to utilize for this named scheme.
+		try: result = entry_points(group='uri.scheme')[plugin].load()
+		except KeyError: result = Scheme(plugin)  # Can't look up by registered name? It's generic.
+		else: result = result(plugin)  # Otherwise, instantiate the subclass, informing it of its name.
 		
-		self.registry[plugin] = result
+		self.registry[plugin] = result  # Record the instance in a local registry / cache.
 		
 		return result
 	
-	def render(self, obj, value):
+	def render(self, obj, value) -> str:
 		result = super(SchemePart, self).render(obj, value)
 		
 		if obj._scheme and obj.scheme.slashed:
