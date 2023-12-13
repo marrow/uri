@@ -1,7 +1,7 @@
 PROJECT = uri
 USE = development
 
-.PHONY: all develop clean veryclean test watch release
+.PHONY: all develop clean veryclean test release
 
 all: clean develop test
 
@@ -18,11 +18,15 @@ veryclean: clean
 
 test: develop
 	@clear
-	@pytest --no-header --no-summary
+	@pytest
 
 watch: develop
 	@clear
 	@find . -iname \*.py | entr -c pytest --no-header --ff --maxfail=1
+
+mpy: develop
+	@clear
+	@find uri -iname \*.py | entr -c mypy -p uri
 
 #release:
 #	./setup.py sdist bdist_wheel upload ${RELEASE_OPTIONS}
