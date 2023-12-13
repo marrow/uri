@@ -28,3 +28,9 @@ def test_issue_003_path_on_path_division():
 	
 	# And it's resolved.
 	assert str(base / target) == "http://ats.example.com/job/detail/sample-job"
+
+
+def test_pathlike_construction():
+	target = URI("http:") // "example.com"
+	assert str(target) == "http://example.com/"
+	assert str(target / "foo") == "http://example.com/foo"
