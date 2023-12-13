@@ -173,7 +173,6 @@ class TestWhatwgURI:
 		instance = URI(string)
 		if "\t" in string: assert len(instance) == len(string) - 1
 		else: assert len(instance) == len(string)
-
 	
 	@pytest.mark.parametrize('component', URI.__all_parts__ | {'base', 'qs', 'summary', 'relative'})
 	def test_component(self, string, attributes, component):
