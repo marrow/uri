@@ -162,9 +162,10 @@ URI_COMPONENTS = [
 	]
 
 for _uri, _parts in URI_COMPONENTS:
-	_parts['uri'] = _uri
+	_parts.setdefault('uri', _uri)
 	if 'query' in _parts: _parts['qs'] = _parts['query']
 	if 'host' in _parts: _parts['hostname'] = _parts['host']
+	_parts.setdefault('length', len(_parts.get('uri', _uri)))
 
 
 @pytest.fixture
