@@ -8,7 +8,6 @@ from uri import Path
 from uri.qso import SENTINEL
 from uri.uri import URI
 
-
 URI_COMPONENTS = [
 		# From test_deconstruct_url.py EXPECTED_DATA
 		('http://site.com/', dict(  # ** for identity test to pass, must have path
@@ -42,7 +41,7 @@ URI_COMPONENTS = [
 				fragment = 'fragment',
 			)),
 		# From test_normalize_host.py
-		('http://xn--e1afmkfd.xn--80akhbyknj4f/', dict(  # ** for identity test to pass, must provide encoded form
+		('http://пример.испытание/', dict(  # ** for identity test to pass, must provide encoded form
 				scheme = 'http',
 				authority = 'xn--e1afmkfd.xn--80akhbyknj4f',
 				heirarchical = 'xn--e1afmkfd.xn--80akhbyknj4f/',
@@ -51,8 +50,9 @@ URI_COMPONENTS = [
 				port = None,
 				path = Path('/'),
 				relative = False,
-				summary = 'пример.испытание/',
+				summary = 'xn--e1afmkfd.xn--80akhbyknj4f/',
 				base = 'http://xn--e1afmkfd.xn--80akhbyknj4f/',
+				uri = 'http://xn--e1afmkfd.xn--80akhbyknj4f/',
 			)),
 	]
 
