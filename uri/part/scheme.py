@@ -44,7 +44,7 @@ class SchemePart(Part):
 		
 		return result
 	
-	def __get__(self, obj:Any, cls:Optional[Any]=None) -> Optional[Union['SchemePart', Scheme]]:
+	def __get__(self, obj:Any, cls:Optional[type]=None) -> Optional[Union['SchemePart', Scheme]]:
 		"""Accessed as a class attribute, return this instance, otherwise decant a Scheme from the containing object."""
 		
 		if obj is None: return self
