@@ -1,10 +1,12 @@
-"""A type to represent, query, and manipulate a Uniform Resource Identifier."""
+"""A type to represent, query, and manipulate Uniform Resource Identifiers."""
 
 from importlib.metadata import metadata as _metadata, PackageNotFoundError as _NotFound
 from os import getlogin
 from socket import gethostname
 
 __all__ = set(locals())  # Initial set of symbols to exclude from our module exports.
+
+from pathlib import PurePosixPath as Path
 
 from .bucket import Bucket  # Query string fragment.
 from .qso import QSO  # An object representing a whole query string.
