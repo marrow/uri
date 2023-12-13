@@ -21,6 +21,6 @@ except _NotFound:  # ...or generate "local development" version and author infor
 	__version__ = 'dev'
 	__author__ = f"Local Development <{getlogin()}@{gethostname()}>"
 
-__license__ = "".join(_package.get_all('license'))
+__license__ = "MIT"
 __all__ = set(i for i in locals() if not i.startswith('_')) - __all__  # Declare module exports for `import *` use.
 
