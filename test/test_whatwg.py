@@ -154,12 +154,10 @@ class TestWhatwgURI:
 		assert instance
 	
 	def test_identity(self, string, attributes):
-		if "\t" in string: pytest.skip("Internal whitespace is cleaned.")
 		instance = URI(string)
 		assert str(instance) == attributes['uri']
 	
 	def test_identity_bytes(self, string, attributes):
-		if "\t" in string: pytest.skip("Internal whitespace is cleaned.")
 		instance = URI(string)
 		assert bytes(instance) == attributes['uri'].encode('utf-8')
 	
