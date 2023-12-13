@@ -14,13 +14,13 @@ from .uri import URI  # The primary class exposed by this package to represent a
 
 try:  # Discover installed package metadata...
 	_package = _metadata('uri')
-	__version__ = _package.get('version')
-	__author__ = f"{_package.get('author')} <{_package.get('author-email')}>"
-	del _package
+	__version__ = ", ".join(_package.get_all('version'))
+	__author__ = "\n".join(_package.get_all('author-email'))
+
 except _NotFound:  # ...or generate "local development" version and author information.
 	__version__ = 'dev'
 	__author__ = f"Local Development <{getlogin()}@{gethostname()}>"
 
-__license__ = 'MIT'  # We could also get this from the package metadata, but it's not likely to change.
+__license__ = "".join(_package.get_all('license'))
 __all__ = set(i for i in locals() if not i.startswith('_')) - __all__  # Declare module exports for `import *` use.
 
