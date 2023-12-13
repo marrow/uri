@@ -11,6 +11,7 @@
 dist
 
 # Virtual Environment Pseudo-Chroot
+.venv
 bin
 include
 lib
@@ -21,8 +22,7 @@ var
 third-party
 
 # Unit Test / Coverage Reports
-.pytest_cache
-.cache
+.*cache
 .cagoule.db
 .coverage
 .tox

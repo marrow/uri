@@ -1,0 +1,147 @@
+[build-system]
+requires = ["setuptools>=61.2", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uri"
+authors = [
+		{name="Alice Bevan-McGregor", email="alice@gothcandy.com"},
+	]
+description = "A type to represent, query, and manipulate a Uniform Resource Identifier."
+readme = "README.rst"
+requires-python = ">=3.8"
+keywords = ['type', 'URI', 'URL', 'rfc', 'rfc']
+license = {text='MIT'}
+classifiers = [
+		"Development Status :: 5 - Production/Stable",
+		"Intended Audience :: Developers",
+		"License :: OSI Approved :: MIT License",
+		"Operating System :: OS Independent",
+		"Programming Language :: Python",
+		"Programming Language :: Python :: 3",
+		"Programming Language :: Python :: 3.8",
+		"Programming Language :: Python :: 3.9",
+		"Programming Language :: Python :: 3.10",
+		"Programming Language :: Python :: 3.11",
+		"Programming Language :: Python :: Implementation :: CPython",
+		"Programming Language :: Python :: Implementation :: PyPy",
+		"Topic :: Software Development :: Libraries :: Python Modules",
+		"Topic :: Utilities"
+	]
+dependencies = []  # URI has no direct runtime dependencies.
+dynamic = ["version"]
+
+[project.urls]
+Repository = "https://github.com/marrow/uri.git"
+
+[project.optional-dependencies]
+http = ['requests']  # Support for the http:// and https:// protocols.
+test = [
+		'pytest',  # Test collector and extensible runner.
+		'pytest-black',  # Syntax linting.
+		'pytest-cov[toml]',  # Coverage reporting.
+		'pytest-flakes',  # Syntax validation.
+		'pytest-isort',  # Import ordering.
+		'pytest-mypy',  # Static type validation.
+		'requests',  # Support for the http:// and https:// protocols.
+		'types-setuptools',  # Typing stubs.
+		'webob',  # Request WSGI environment mocking.
+	]
+development = [  # Development-time dependencies.
+		'bandit',  # Automated security analysis.
+		'black',  # Syntax linting.
+		'build[virtualenv]',  # Python packaging build tool.
+		'cibuildwheel',  # Build automation.
+		'e',  # Try: python3 -me
+		'mypy',  # Type hinting analysis.
+		'pre-commit',  # Commit hooks for code quality.
+		'ptipython',  # Enhanced interactive REPL shell.
+		'pytest',  # Test collector and extensible runner.
+		'pytest-black',  # Syntax linting.
+		'pytest-cov[toml]',  # Coverage reporting.
+		'pytest-flakes',  # Syntax validation.
+		'pytest-isort',  # Import ordering.
+		'pytest-mypy',  # Static type validation.
+		'requests',  # Support for the http:// and https:// protocols.
+		'rope',  # Project symbols collection.
+		'twine',  # Python package release tool.
+		'types-setuptools',  # Typing stubs.
+		'webob',  # Request WSGI environment mocking.
+		'wheel',  # "Wheel" package format support.
+	]
+
+[project.entry-points."uri.scheme"]
+# https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
+# https://www.w3.org/wiki/UriSchemes
+# https://github.com/APSL/uri/commit/709b4b73daae7b8651b92fd4fa63af41c4db2986
+# https://docs.mongodb.com/manual/reference/connection-string
+file = 'uri.scheme:URLScheme'
+ftp = 'uri.scheme:URLScheme'
+http = 'uri.scheme:URLScheme'
+https = 'uri.scheme:URLScheme'
+irc = 'uri.scheme:URLScheme'
+ldap = 'uri.scheme:URLScheme'
+telnet = 'uri.scheme:URLScheme'
+sftp = 'uri.scheme:URLScheme'
+mysql = 'uri.scheme:URLScheme'
+redis = 'uri.scheme:URLScheme'
+postgres = 'uri.scheme:URLScheme'
+postgresql = 'uri.scheme:URLScheme'
+mongodb = 'uri.scheme:URLScheme'
+
+
+[tool.setuptools_scm]
+
+
+[tool.pytest.ini_options]
+addopts = '-l -r fEsxw --cov uri --no-cov-on-fail --cov-report term-missing --cov-report xml --flakes --isort --durations=5 --color=yes test'
+
+flakes-ignore = [
+		'test/*.py UnusedImport',
+		'test/*/*.py UnusedImport ImportStarUsed',
+	]
+
+filterwarnings = [
+		'default',
+		'ignore::DeprecationWarning:isort.*',
+	]
+
+
+[tool.coverage.report]
+exclude_lines = [
+		# Re-enable the standard pragma, since we override it.
+		'pragma: no( |-)?cov(er)?',
+		
+		# Don't complain if non-runnable code isn't run:
+		'if 0:',
+		'if False:',
+		'if __name__ == .__main__.:',
+	]
+
+
+[tool.isort]
+line_length = 120
+multi_line_output = 3
+balanced_wrapping = false
+include_trailing_comma = true
+indent = "		"
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+verbose = true
+known_first_party = ["uri"]
+
+
+[tool.black]
+line_length = 120
+
+
+[tool.mypy]
+follow_imports = "silent"
+strict_optional = true
+warn_no_return = false
+#check_untyped_defs = true
+#ignore_missing_imports = true
+
+# required to support namespace packages
+# https://github.com/python/mypy/issues/14057
+explicit_package_bases = true
+

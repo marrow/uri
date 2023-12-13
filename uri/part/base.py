@@ -1,13 +1,14 @@
 from operator import attrgetter
 from re import compile as r, Pattern
+from typing import Any, Callable, Optional, Tuple, TypeVar, Union, Iterable, abstractmethod
 
-from ..typing import abstractmethod, Optional, Stringy, T, Iterable
+from ..typing import Stringy
 
 
 class Part:
 	"""Descriptor protocol objects for combinatorial string parts with validation."""
 	
-	__slots__ = ()
+	__slots__: Tuple[str, ...] = ()
 	
 	valid: Pattern = r(r'.*')
 	prefix: str = ''
@@ -19,7 +20,7 @@ class Part:
 		return self.prefix + str(value) + self.suffix
 	
 	@abstractmethod
-	def __get__(self, obj, cls:Optional[T]=None):
+	def __get__(self, obj, cls:Optional[type]=None):
 		pass
 	
 	@abstractmethod
@@ -28,12 +29,12 @@ class Part:
 
 
 class ProxyPart(Part):
-	__slots__ = ()
+	__slots__: Tuple[str, ...] = ()
 	
-	attribute = None
-	cast = str
+	attribute: str
+	cast: Callable[[Any], str] = str
 	
-	def __get__(self, obj, cls=None):
+	def __get__(self, obj, cls=None) -> Union[str, 'ProxyPart']:
 		if obj is None: return self
 		return getattr(obj, self.attribute)
 	
@@ -48,12 +49,12 @@ class ProxyPart(Part):
 
 
 class GroupPart(Part):
-	__slots__ = ()
+	__slots__: Tuple[str, ...] = ()
 	
-	attributes:Iterable[str] = ()
-	sep:str = ''
+	attributes: Iterable[str, ...] = ()
+	sep: str = ''
 	
-	def __get__(self, obj, cls=None) -> str:
+	def __get__(self, obj, cls:Optional[type]=None) -> Union[str, 'GroupPart']:
 		if obj is None: return self
 		
 		cls = obj.__class__
@@ -68,6 +69,6 @@ class GroupPart(Part):
 
 
 class BasePart(GroupPart):
-	__slots__ = ()
+	__slots__: Tuple[str, ...] = ()
 	
-	attributes = ('scheme', 'heirarchical')
+	attributes: Tuple[str, ...] = ('scheme', 'heirarchical')

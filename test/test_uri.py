@@ -148,23 +148,25 @@ URI_COMPONENTS = [
 			)),
 		
 		# IDNA (Internationalized Domain Name) Encoding
-		('https://xn--ls8h.la/', dict(
+		('https://💩.la/', dict(
 				scheme = 'https',
 				path = Path('/'),
 				host = '💩.la',
 				authority = 'xn--ls8h.la',
 				heirarchical = 'xn--ls8h.la/',
-				summary = '💩.la/',
+				summary = 'xn--ls8h.la/',
 				base = 'https://xn--ls8h.la/',
 				relative = False,
 				resource = '/',
+				uri = 'https://xn--ls8h.la/',
 			))
 	]
 
 for _uri, _parts in URI_COMPONENTS:
-	_parts['uri'] = _uri
+	_parts.setdefault('uri', _uri)
 	if 'query' in _parts: _parts['qs'] = _parts['query']
 	if 'host' in _parts: _parts['hostname'] = _parts['host']
+	_parts.setdefault('length', len(_parts.get('uri', _uri)))
 
 
 @pytest.fixture
@@ -212,7 +214,7 @@ class TestURI:
 	
 	def test_length(self, string, attributes):
 		instance = URI(string)
-		assert len(instance) == len(string)
+		assert len(instance) == attributes['length']
 	
 	@pytest.mark.parametrize('component', URI.__all_parts__ | {'base', 'qs', 'summary', 'relative'})
 	def test_component(self, string, attributes, component):

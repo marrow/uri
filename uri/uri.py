@@ -33,6 +33,7 @@ class URI:
 	__slots__ = ('_scheme', '_user', '_password', '_host', '_port', '_path', '_trailing', '_query', '_fragment')
 	
 	__parts__ = ('scheme', 'authority', 'path', 'query', 'fragment')
+	__origin_parts__ = ('scheme', 'authority')
 	__safe_parts__ = ('scheme', '_safe_auth', 'host', 'port', 'path', 'query', 'fragment')
 	__all_parts__ = {'scheme', 'user', 'password', 'host', 'port', 'path', 'query', 'fragment', 'auth', 'authority',
 			'heirarchical', 'uri', 'username', 'hostname', 'authentication'}
@@ -50,12 +51,13 @@ class URI:
 	# Compound Parts
 	auth = AuthenticationPart()
 	_safe_auth = SafeAuthenticationPart()
-	authority = AuthorityPart()
+	authority = netloc = AuthorityPart()
 	heirarchical = HeirarchicalPart()
 	
 	# Additional Compound Interfaces
 	uri = URIPart(__parts__)  # Whole-URI retrieval or storage as string.
-	safe_uri = URIPart(__safe_parts__, False)  # URI retrieval without password component, useful for logging.
+	origin = URIPart(__origin_parts__)  # The top-level "origin" for this URL.
+	safe = safe_uri = URIPart(__safe_parts__, False)  # URI retrieval without password component, useful for logging.
 	base = BasePart()
 	origin = URIPart(('scheme', 'host', 'port'), False)
 	summary = URIPart(('host', 'path'), False, True)
@@ -213,7 +215,7 @@ class URI:
 	
 	def __len__(self):
 		"""The length of the URI as a string."""
-		return len(self.uri)
+		return len(str(self.uri))
 	
 	# Path-like behaviours.
 	

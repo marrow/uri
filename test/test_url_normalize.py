@@ -41,7 +41,7 @@ URI_COMPONENTS = [
 				fragment = 'fragment',
 			)),
 		# From test_normalize_host.py
-		('http://xn--e1afmkfd.xn--80akhbyknj4f/', dict(  # ** for identity test to pass, must provide encoded form
+		('http://пример.испытание/', dict(  # ** for identity test to pass, must provide encoded form
 				scheme = 'http',
 				authority = 'xn--e1afmkfd.xn--80akhbyknj4f',
 				heirarchical = 'xn--e1afmkfd.xn--80akhbyknj4f/',
@@ -52,13 +52,15 @@ URI_COMPONENTS = [
 				relative = False,
 				summary = 'пример.испытание/',
 				base = 'http://xn--e1afmkfd.xn--80akhbyknj4f/',
+				uri = 'http://xn--e1afmkfd.xn--80akhbyknj4f/',
 			)),
 	]
 
 for _uri, _parts in URI_COMPONENTS:
-	_parts['uri'] = _uri
+	_parts.setdefault('uri', _uri)
 	if 'query' in _parts: _parts['qs'] = _parts['query']
 	if 'host' in _parts: _parts['hostname'] = _parts['host']
+	_parts.setdefault('length', len(_parts.get('uri', _uri)))
 
 
 def test_normalize_scheme():
@@ -105,3 +107,4 @@ class TestURLNormalize:
 			return
 		
 		assert value == attributes[component]
+
