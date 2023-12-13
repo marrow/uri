@@ -4,7 +4,7 @@ from importlib.metadata import metadata as _metadata, PackageNotFoundError as _N
 from os import getlogin
 from socket import gethostname
 
-__all__ = set(locals())  # Initial set of symbols to exclude from our module exports.
+__all__ = list(locals())  # Initial set of symbols to exclude from our module exports.
 
 from pathlib import PurePosixPath as Path
 
@@ -22,5 +22,5 @@ except _NotFound:  # ...or generate "local development" version and author infor
 	__author__ = f"Local Development <{getlogin()}@{gethostname()}>"
 
 __license__ = "MIT"
-__all__ = set(i for i in locals() if not i.startswith('_')) - __all__  # Declare module exports for `import *` use.
+__all__ = list(set(i for i in locals() if not i.startswith('_')) - set(__all__))  # Declare module exports for `import *` use.
 
