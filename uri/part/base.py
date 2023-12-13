@@ -51,7 +51,7 @@ class ProxyPart(Part):
 class GroupPart(Part):
 	__slots__: Tuple[str, ...] = ()
 	
-	attributes: Iterable[str, ...] = ()
+	attributes: Iterable[str] = ()
 	sep: str = ''
 	
 	def __get__(self, obj, cls:Optional[type]=None) -> Union[str, 'GroupPart']:
