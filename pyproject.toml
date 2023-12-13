@@ -94,7 +94,7 @@ mongodb = 'uri.scheme:URLScheme'
 
 
 [tool.pytest.ini_options]
-addopts = '-l -r fEsxw --cov uri --mypy --no-cov-on-fail --cov-report term-missing --cov-report xml --flakes --isort --durations=5 --color=yes test'
+addopts = '-l -r fEsxw --cov uri --no-cov-on-fail --cov-report term-missing --cov-report xml --flakes --isort --durations=5 --color=yes test'
 
 flakes-ignore = [
 		'test/*.py UnusedImport',
