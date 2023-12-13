@@ -146,6 +146,19 @@ URI_COMPONENTS = [
 				relative = False,
 				resource = 'oasis:names:specification:docbook:dtd:xml:4.1.2',
 			)),
+		
+		# IDNA (Internationalized Domain Name) Encoding
+		('https://xn--ls8h.la/', dict(
+				scheme = 'https',
+				path = Path('/'),
+				host = '💩.la',
+				authority = 'xn--ls8h.la',
+				heirarchical = 'xn--ls8h.la/',
+				summary = '💩.la/',
+				base = 'https://xn--ls8h.la/',
+				relative = False,
+				resource = '/',
+			))
 	]
 
 for _uri, _parts in URI_COMPONENTS:
