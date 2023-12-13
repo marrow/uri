@@ -13,7 +13,7 @@ class Bucket:
 		if not value:
 			if isinstance(name, str):
 				if name.count(sep) > 1:
-					if strict: raise ValueError("Multiple occurrences of separator {!r} in: '{!s}'".format(sep, name))
+					if strict: raise ValueError(f"Multiple occurrences of separator {sep!r} in: '{name}'")
 					self.valid = False
 				
 				name, value = self.split(name)
