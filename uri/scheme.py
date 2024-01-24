@@ -16,6 +16,8 @@ class Scheme:
         if isinstance(other, self.__class__):
             return self is other
 
+        raise RuntimeError(f"Cannot compare objects - incompatible types, " f"self: {type(self)}, other: {type(other)}")
+
     def __hash__(self) -> int:
         return hash(self.name)
 
