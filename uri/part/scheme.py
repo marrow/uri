@@ -1,4 +1,4 @@
-from importlib.metadata import entry_points
+from importlib_metadata import entry_points
 from typing import Any, ClassVar, Dict, Optional, Union  # , Self
 from re import compile as r, Pattern
 
@@ -25,6 +25,7 @@ class SchemePart(Part):
 
         # If we haven't, attempt to load the explicit Scheme subclass to utilize for this named scheme.
         try:
+            import pdb; pdb.set_trace()
             result = entry_points(group="uri.scheme")[plugin].load()
         except KeyError:
             result = Scheme(plugin)  # Can't look up by registered name? It's generic.

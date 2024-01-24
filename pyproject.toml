@@ -28,7 +28,7 @@ classifiers = [
 		"Topic :: Software Development :: Libraries :: Python Modules",
 		"Topic :: Utilities"
 	]
-dependencies = []  # URI has no direct runtime dependencies.
+dependencies = ["importlib_metadata"]
 dynamic = ["version"]
 
 [project.urls]
