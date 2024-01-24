@@ -30,3 +30,11 @@ repos:
         language: system
         entry: sh -c 'TEST_SKIP_CAPPED=1 py.test'
         files: ""
+      - id: black
+        name: Black formatter
+        description: "Black: The uncompromising Python code formatter"
+        entry: black
+        language: system
+        minimum_pre_commit_version: 2.9.2
+        require_serial: true
+        types_or: [python, pyi]

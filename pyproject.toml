@@ -144,4 +144,3 @@ warn_no_return = false
 # required to support namespace packages
 # https://github.com/python/mypy/issues/14057
 explicit_package_bases = true
-

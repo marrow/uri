@@ -40,3 +40,5 @@ htmlcov
 .mypy_cache
 .ropeproject
 tags
+
+.coverage.*
