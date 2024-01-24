@@ -42,3 +42,4 @@ htmlcov
 tags
 
 .coverage.*
+.tool-versions

@@ -25,7 +25,6 @@ class SchemePart(Part):
 
         # If we haven't, attempt to load the explicit Scheme subclass to utilize for this named scheme.
         try:
-            import pdb; pdb.set_trace()
             result = entry_points(group="uri.scheme")[plugin].load()
         except KeyError:
             result = Scheme(plugin)  # Can't look up by registered name? It's generic.
