@@ -13,14 +13,15 @@ from .qso import QSO  # An object representing a whole query string.
 from .uri import URI  # The primary class exposed by this package to represent a URL or URI.
 
 try:  # Discover installed package metadata...
-	_package = _metadata('uri')
-	__version__ = ", ".join(_package.get_all('version'))
-	__author__ = "\n".join(_package.get_all('author-email'))
+    _package = _metadata("uri")
+    __version__ = ", ".join(_package.get_all("version"))
+    __author__ = "\n".join(_package.get_all("author-email"))
 
 except _NotFound:  # ...or generate "local development" version and author information.
-	__version__ = 'dev'
-	__author__ = f"Local Development <{getlogin()}@{gethostname()}>"
+    __version__ = "dev"
+    __author__ = f"Local Development <{getlogin()}@{gethostname()}>"
 
 __license__ = "MIT"
-__all__ = list(set(i for i in locals() if not i.startswith('_')) - set(__all__))  # Declare module exports for `import *` use.
-
+__all__ = list(
+    set(i for i in locals() if not i.startswith("_")) - set(__all__)
+)  # Declare module exports for `import *` use.

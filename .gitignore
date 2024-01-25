@@ -40,3 +40,6 @@ htmlcov
 .mypy_cache
 .ropeproject
 tags
+
+.coverage.*
+.tool-versions

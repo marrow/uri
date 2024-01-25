@@ -1,31 +1,40 @@
--   repo: https://github.com/pre-commit/pre-commit-hooks.git
-    sha: 5bf6c09bfa1297d3692cadd621ef95f1284e33c0
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: "v4.5.0"
     hooks:
-    -   id: check-added-large-files
-    -   id: check-ast
-    -   id: check-byte-order-marker
-    -   id: check-docstring-first
-    -   id: check-merge-conflict
-    -   id: check-symlinks
-    -   id: debug-statements
-    -   id: detect-private-key
-    -   id: end-of-file-fixer
-    -   id: forbid-new-submodules
-    -   id: check-json
-    -   id: check-xml
-    -   id: check-yaml
--   repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    sha: v1.1.0
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-byte-order-marker
+      - id: check-docstring-first
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: forbid-new-submodules
+      - id: check-json
+      - id: check-xml
+      - id: check-yaml
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    rev: v1.1.0
     hooks:
-    -   id: python-safety-dependencies-check
--   repo: https://github.com/Lucas-C/pre-commit-hooks-bandit
-    sha: v1.0.3
+      - id: python-safety-dependencies-check
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-bandit
+    rev: v1.0.3
     hooks:
-    -   id: python-bandit-vulnerability-check
--   repo: local
+      - id: python-bandit-vulnerability-check
+  - repo: local
     hooks:
-    -   id: py.test
+      - id: py.test
         name: py.test
         language: system
         entry: sh -c 'TEST_SKIP_CAPPED=1 py.test'
-        files: ''
+        files: ""
+      - id: black
+        name: Black formatter
+        description: "Black: The uncompromising Python code formatter"
+        entry: black
+        language: system
+        minimum_pre_commit_version: 2.9.2
+        require_serial: true
+        types_or: [python, pyi]
