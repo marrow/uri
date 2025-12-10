@@ -28,6 +28,9 @@ mpy: develop  ## Perform project linting on each detected file change.
 	@clear
 	@find uri -iname \*.py | entr -c mypy -p uri
 
+build:  ## Minimal build automation.
+	python3 -m build
+
 release:  ## Build a source and wheel distribution.
 	@echo "Needs to be reimplemented."
 	
