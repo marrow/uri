@@ -1,8 +1,6 @@
 """A type to represent, query, and manipulate Uniform Resource Identifiers."""
 
 from importlib.metadata import metadata as _metadata, PackageNotFoundError as _NotFound
-from os import getlogin
-from socket import gethostname
 
 __all__ = list(locals())  # Initial set of symbols to exclude from our module exports.
 
@@ -19,8 +17,8 @@ try:  # Discover installed package metadata...
 
 except _NotFound:  # ...or generate "local development" version and author information.
 	__version__ = 'dev'
-	__author__ = f"Local Development <{getlogin()}@{gethostname()}>"
+	__author__ = f"Local Development <{__import__('os').getlogin()}@{__import__('socket').gethostname()}>"
 
 __license__ = "MIT"
-__all__ = list(set(i for i in locals() if not i.startswith('_')) - set(__all__))  # Declare module exports for `import *` use.
+__all__ = list(set(i for i in locals() if not i.startswith('_')) - set(__all__))  # Declare exports for `import *`.
 
