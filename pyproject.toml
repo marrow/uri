@@ -11,7 +11,6 @@ description = "A type to represent, query, and manipulate a Uniform Resource Ide
 readme = "README.rst"
 requires-python = ">=3.8"
 keywords = ['type', 'URI', 'URL', 'rfc', 'rfc']
-license = {text='MIT'}
 classifiers = [
 		"Development Status :: 5 - Production/Stable",
 		"Intended Audience :: Developers",
