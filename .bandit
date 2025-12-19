@@ -1,2 +1,2 @@
 [bandit]
-exclude: .*cache,.venv
+exclude: .benchmarks,.github,.*cache,.venv,dist
