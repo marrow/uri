@@ -1,0 +1,36 @@
+# EditorConfig Configuration file, ref: https://editorconfig.org
+# A convention description interprable by multiple editors to enforce coding conventions for specific file types.
+
+root = true
+
+[*]
+
+# Default character set is UTF-8.
+charset = utf-8
+
+# We utilize UNIX newlines, with a final newline inserted by default.
+end_of_line = lf
+insert_final_newline = true
+
+# The One True™ indentation style.
+indent_style = tab
+indentation_width = 4
+indent_size = 4
+trim_trailing_whitespace = false
+
+# Maximum line length for Marrow projects is 120 characters.
+max_line_length = 120
+
+[*.{py,cfg,ini}]
+# 4 character width indentation.
+indent_size = 4
+
+[*.{yml,zpt,pt,dtml,zcml}]
+# 2 character width indentation
+indent_size = 2
+
+[{Makefile,.gitmodules}]
+# Tab indentation; no size specified, but view as 4 spaces.
+indent_style = tab
+indent_size = unset
+tab_width = unset

@@ -1,4 +1,4 @@
-from urllib.parse import quote_plus, unquote_plus
+from urllib.parse import quote_plus as qp, unquote_plus as uqp
 
 
 class Bucket:
@@ -13,7 +13,9 @@ class Bucket:
 		if not value:
 			if isinstance(name, str):
 				if name.count(sep) > 1:
-					if strict: raise ValueError(f"Multiple occurrences of separator {sep!r} in: '{name}'")
+					if strict:
+						raise ValueError(f"Multiple occurrences of separator {sep!r} in: '{name}'")
+					
 					self.valid = False
 				
 				name, value = self.split(name)
@@ -36,16 +38,13 @@ class Bucket:
 	def split(self, string):
 		name, match, value = string.partition(self.sep)
 		
-		name = unquote_plus(name)
-		value = unquote_plus(value)
+		name = uqp(name)
+		value = uqp(value)
 		
 		return name if match else None, value if match else name
 	
 	def __repr__(self):
-		return "{}({})".format(
-				self.__class__.__name__,
-				str(self)
-			)
+		return f"{self.__class__.__name__}({self!s})"
 	
 	def __iter__(self):
 		if self.name is not None:  # XXX: Confirm that empty string is permissible.
@@ -58,6 +57,5 @@ class Bucket:
 	
 	def __str__(self):
 		# Certain symbols are explicitly allowed, ref: http://pretty-rfc.herokuapp.com/RFC3986#query
-		iterator = (quote_plus(i.encode('utf8')).replace('%3F', '?').replace('%2F', '/') for i in self) if self.valid else self
+		iterator = (qp(i.encode('utf8')).replace('%3F', '?').replace('%2F', '/') for i in self) if self.valid else self
 		return self.sep.join(iterator)
-

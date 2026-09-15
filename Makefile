@@ -1,51 +1,56 @@
-PROJECT = uri
-USE = development
+.PHONY: all develop clean veryclean install test watch format lint build release help
 
-.PHONY: all develop clean veryclean test watch release
+all: clean develop test  ## Default target: clean, install for local use, and execute tests.
 
-all: clean develop test  ## Clean up, install for development use, and execute tests.
-
-develop: ${PROJECT}.egg-info/PKG-INFO  ## Install locally, in-place editable.
+develop: uri.egg-info/PKG-INFO  ## Install locally, in-place editable.
 
 clean:  ## Delete all reproducible files.
 	find . -name __pycache__ -exec rm -rfv {} +
 	find . -iname \*.pyc -exec rm -fv {} +
 	find . -iname \*.pyo -exec rm -fv {} +
-	rm -rvf build htmlcov
+	rm -rvf htmlcov
 
 veryclean: clean  ## Also remove built packages and metadata.
-	rm -rvf *.egg-info .packaging/*
+	rm -rvf build *.egg-info .packaging/* "${VIRTUAL_ENV}/lib/pip-cache"
+
+install:  ## Install project and dependencies in the local virtual environment.
+	@mkdir -p ${VIRTUAL_ENV}/lib/pip-cache
+	pip3 install --cache-dir "${VIRTUAL_ENV}/lib/pip-cache" -U .
+
+watch: develop  ## Execute the test suite and linter on each detected file change.
+	@clear
+	@find . -iname \*.py | entr -c make lint format test
+
+lint:  ## Perform project linting on each detected file change.
+	@flake8 uri --toml-config pyproject.toml  # Deprecated due to upstream shenanigans re: pyproject.toml
+	@mypy -p uri
+
+format:  ## Format code with black and isort.
+	black uri/
+	isort uri/
 
 test: develop  ## Execute the full test suite.
 	@clear
-	@pytest --no-header --no-summary
+	pytest --no-header --no-summary --ff
 
-watch: develop  ## Execute the test suite on each detected file change.
-	@clear
-	@find . -iname \*.py | entr -c pytest --no-header --ff --maxfail=1
-
-mpy: develop  ## Perform project linting on each detected file change.
-	@clear
-	@find uri -iname \*.py | entr -c mypy -p uri
-
-build:  ## Minimal build automation.
+build:  ## Build a source and wheel distribution.
 	python3 -m build
 
-release:  ## Build a source and wheel distribution.
-	@echo "Needs to be reimplemented."
-	
-	python3 -m build --sdist --wheel
-	[[ `uname -s` == "Darwin" ]] && open .packaging/release
-	
-	#./setup.py sdist bdist_wheel upload ${RELEASE_OPTIONS}
-	#@echo -e "\nView online at: https://pypi.python.org/pypi/${PROJECT} or https://pypi.org/project/${PROJECT}/"
-	#@echo -e "Remember to make a release announcement and upload contents of .packaging/release/ folder as a Release on GitHub.\n"
+release: lint format test build  ## Build a source and wheel distribution.
+	python3 -m pip install -U twine
+
+	# twine upload --repository testpypi dist/*
+	twine upload dist/*
+
+	[[ `uname -s` == "Darwin" ]] && open dist
+
+	@echo -e "\nView online at: https://pypi.python.org/pypi/uri or https://pypi.org/project/uri/"
+	@echo -e "Remember to make a release announcement and upload contents of .packaging/release/ folder as a Release on GitHub.\n"
 
 help:  ## Show this help message and exit.
 	@echo "Usage: make <command>\n\033[36m\033[0m"
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z_-]+:.*?##/ { printf "\033[36m%-12s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST) | sort
 
-${PROJECT}.egg-info/PKG-INFO: pyproject.toml
+uri.egg-info/PKG-INFO: pyproject.toml
 	@mkdir -p ${VIRTUAL_ENV}/lib/pip-cache
-	pip install --cache-dir "${VIRTUAL_ENV}/lib/pip-cache" -Ue ".[${USE}]"
-
+	pip install --cache-dir "${VIRTUAL_ENV}/lib/pip-cache" -Ue ".[development]"

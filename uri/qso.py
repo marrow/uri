@@ -4,6 +4,7 @@ from collections.abc import Mapping, MutableMapping
 from .bucket import Bucket
 
 
+MISSING = sentinel("MISSING", repr="<MISSING")
 SENTINEL = object()
 
 
@@ -230,7 +231,7 @@ class QSO:
 	def remove(self, bucket):  # MutableSequence
 		del self[bucket]
 	
-	def pop(self, key=SENTINEL, default=SENTINEL):  # MutableSequence, MutableMapping
+	def pop(self, key=MISSING, default=SENTINEL):  # MutableSequence, MutableMapping
 		if key is SENTINEL:
 			key = -1
 		

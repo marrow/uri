@@ -1,9 +1,10 @@
 [build-system]
-requires = ["setuptools>=61.2", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools >= 78.1.1,< 81", "wheel", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "uri"
+dynamic = ["version"]
 authors = [
 		{name="Alice Bevan-McGregor", email="alice@gothcandy.com"},
 	]
@@ -16,19 +17,14 @@ classifiers = [
 		"Intended Audience :: Developers",
 		"License :: OSI Approved :: MIT License",
 		"Operating System :: OS Independent",
-		"Programming Language :: Python",
 		"Programming Language :: Python :: 3",
-		"Programming Language :: Python :: 3.8",
-		"Programming Language :: Python :: 3.9",
-		"Programming Language :: Python :: 3.10",
-		"Programming Language :: Python :: 3.11",
 		"Programming Language :: Python :: Implementation :: CPython",
 		"Programming Language :: Python :: Implementation :: PyPy",
+		"Programming Language :: Python",
 		"Topic :: Software Development :: Libraries :: Python Modules",
-		"Topic :: Utilities"
+		"Topic :: Utilities",
 	]
 dependencies = []  # URI has no direct runtime dependencies.
-dynamic = ["version"]
 
 [project.urls]
 Repository = "https://github.com/marrow/uri.git"
@@ -36,6 +32,7 @@ Repository = "https://github.com/marrow/uri.git"
 [project.optional-dependencies]
 http = ['requests']  # Support for the http:// and https:// protocols.
 test = [
+		'flake8',  # Static linter.
 		'pytest',  # Test collector and extensible runner.
 		'pytest-black',  # Syntax linting.
 		'pytest-cov[toml]',  # Coverage reporting.
@@ -47,6 +44,7 @@ test = [
 		'webob',  # Request WSGI environment mocking.
 	]
 development = [  # Development-time dependencies.
+		'flake8',  # Static linter.
 		'bandit',  # Automated security analysis.
 		'black',  # Syntax linting.
 		'build[virtualenv]',  # Python packaging build tool.
@@ -69,6 +67,7 @@ development = [  # Development-time dependencies.
 		'wheel',  # "Wheel" package format support.
 	]
 
+
 [project.entry-points."uri.scheme"]
 # https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
 # https://www.w3.org/wiki/UriSchemes
@@ -89,7 +88,12 @@ postgresql = 'uri.scheme:URLScheme'
 mongodb = 'uri.scheme:URLScheme'
 
 
+[tool.setuptools.dynamic]
+version = { attr = "uri.__version__" }
+
+
 [tool.setuptools_scm]
+version_scheme = "post-release"
 
 
 [tool.pytest.ini_options]
@@ -110,7 +114,7 @@ filterwarnings = [
 exclude_lines = [
 		# Re-enable the standard pragma, since we override it.
 		'pragma: no( |-)?cov(er)?',
-		
+
 		# Don't complain if non-runnable code isn't run:
 		'if 0:',
 		'if False:',
@@ -119,6 +123,13 @@ exclude_lines = [
 
 
 [tool.isort]
+atomic = true
+color_output = true
+
+lines_after_imports = 2
+force_single_line = true
+remove_redundant_aliases = true
+
 line_length = 120
 multi_line_output = 3
 balanced_wrapping = false
@@ -127,6 +138,17 @@ indent = "		"
 sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 verbose = true
 known_first_party = ["uri"]
+
+
+[tool.flake8]
+max-line-length = 120
+
+per-file-ignores = [
+	# Indentation using tabs.
+	# Blank lines must match indentation level.
+	# Dictionary arguments may include whitespace around equals.
+	'**/*.py:W191,W293,E251',
+]
 
 
 [tool.black]
@@ -143,4 +165,3 @@ warn_no_return = false
 # required to support namespace packages
 # https://github.com/python/mypy/issues/14057
 explicit_package_bases = true
-

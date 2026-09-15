@@ -1,0 +1,49 @@
+name: tests
+jobs:
+  build:
+    permissions:
+      contents: read
+      pull-requests: write
+    strategy:
+      # We want to see all failures:
+      fail-fast: false
+      matrix:
+        os:
+        - ["ubuntu", "ubuntu-latest"]
+        config:
+        # [Python version, tox env]
+        - ["3.11", "release-check"]
+        - ["3.10", "py310"]
+        - ["3.11", "py311"]
+        - ["3.12", "py312"]
+        - ["3.13", "py313"]
+        - ["3.14", "py314"]
+        - ["pypy-3.11", "pypy3"]
+        - ["3.11", "docs"]
+        - ["3.11", "coverage"]
+
+    runs-on: ${{ matrix.os[1] }}
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    name: ${{ matrix.config[1] }}
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+    - name: Install uv + caching
+      # astral/setup-uv@7.5.0
+      uses: astral-sh/setup-uv@e06108dd0aef18192324c70427afc47652e63a82
+      with:
+        enable-cache: true
+        cache-dependency-glob: |
+          setup.*
+          tox.ini
+        python-version: ${{ matrix.config[0] }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Test
+      run: uvx --with tox-uv tox -e ${{ matrix.config[1] }}
+    - name: Coverage
+      if: matrix.config[1] == 'coverage'
+      run: |
+        uvx coveralls --service=github
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

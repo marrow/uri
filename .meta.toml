@@ -1,0 +1,10 @@
+[python]
+with-pypy = true
+with-docs = true
+with-windows = false
+with-future-python = false
+with-macos = true
+with-free-threaded-python = false
+
+[coverage]
+fail-under = 99

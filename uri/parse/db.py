@@ -1,11 +1,9 @@
 """Attempt to parse a database "connection string", retrieving the relevant component parts."""
 
-from pytest import fixture
-
 from .. import URI
 
 
-def parse_dburi(url:str, uppercase:bool=False) -> dict:
+def parse_dburi(url: str, uppercase: bool = False) -> dict:
 	"""Parse a given URL or URI string and return the component parts relevant for database connectivity.
 	
 	These come in the general UNIX form:

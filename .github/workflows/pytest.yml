@@ -1,21 +1,37 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: "Python Test Suite"
+name: "Test Suites"
 
 on:
   push:
-    branches: [ develop, master ]
   pull_request:
-    branches: [ develop ]
+  schedule:
+    - cron: '0 12 * * 0'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+      pull-requests: write
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.8, 3.9, 3.10, 3.11]
+        os:
+        - ["ubuntu", "ubuntu-latest", "macos-latest", "windows-latest"]
+        config:
+        # [Python version, tox env]
+        - ["3.11", "release-check"]
+        - ["3.10", "py310"]
+        - ["3.11", "py311"]
+        - ["3.12", "py312"]
+        - ["3.13", "py313"]
+        - ["3.14", "py314"]
+        - ["pypy-3.11", "pypy3"]
+        - ["3.11", "docs"]
+        - ["3.11", "coverage"]
 
     steps:
     - uses: actions/checkout@v2
